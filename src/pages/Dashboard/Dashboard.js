@@ -1,11 +1,12 @@
 import React from 'react'
 import Comming from '../../shared/Comming/Comming'
+import Header from '../../shared/Header/Header'
 
 const Dashboard = () => {
   return (
     <div>
-        <h1>This is dashboard</h1>
-        <Comming />
+      <Header category="Dashboard" title="Dashboard" />
+      <Comming />
     </div>
   )
 }

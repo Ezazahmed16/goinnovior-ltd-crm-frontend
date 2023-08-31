@@ -4,10 +4,11 @@ import { Outlet } from 'react-router-dom';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import { FiSettings } from 'react-icons/fi';
 import Sidebar from '../shared/Sidebar/Sidebar';
+import { useStateContext } from '../contexts/ContextProvider';
 
 const Main = () => {
 
-const activeMenu = true
+  const { activeMenu } = useStateContext();
 
   return (
     <div className='flex relative dark:bg-main-dark-bg'>
