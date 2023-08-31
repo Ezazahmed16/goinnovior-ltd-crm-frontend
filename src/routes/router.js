@@ -8,6 +8,8 @@ import Kanban from "../pages/Kanban/Kanban";
 import GenarelSettings from "../pages/Dashboard/GenarelSettings/GenarelSettings";
 import Clients from "../pages/Clients/Clients";
 import HumanResource from "../pages/HumanResource/HumanResource";
+import Singin from '../shared/Singin/Singin'
+import Singup from '../shared/Singup/Singup'
 
 const router = createBrowserRouter([
     {
@@ -58,6 +60,14 @@ const router = createBrowserRouter([
                 element: <GenarelSettings />
             },
         ]
+    },
+    {
+        path: '/singin',
+        element: <Singin />
+    },
+    {
+        path: '/singup',
+        element: <Singup></Singup>
     },
 ]);
 

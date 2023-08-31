@@ -2,10 +2,12 @@ import React, { useEffect } from 'react';
 import { AiOutlineMenu } from 'react-icons/ai';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
+import { AiOutlineLogin } from 'react-icons/ai';
 
 import avatar from '../../assets/Avatar.png';
 import { useStateContext } from '../../contexts/ContextProvider';
 import UserProfile from '../../components/UserProfile/UserProfile';
+import { Link } from 'react-router-dom';
 
 const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
   <TooltipComponent content={title} position="BottomCenter">
@@ -52,7 +54,16 @@ const Navbar = () => {
 
       <NavButton title="Menu" customFunc={handleActiveMenu} color={currentColor} icon={<AiOutlineMenu />} />
       <div className="flex">
-        <TooltipComponent content="Profile" position="BottomCenter">
+
+        {/* Auth */}
+
+        <Link to='singin'>
+          <button style={{ backgroundColor: currentColor }} className="btn text-white font-semibold">Login
+            <AiOutlineLogin className='w-6 h-6'/>
+          </button>          
+        </Link>
+
+        {/* <TooltipComponent content="Profile" position="BottomCenter">
           <div
             className="flex items-center gap-2 cursor-pointer p-1 hover:bg-light-gray rounded-lg"
             onClick={() => handleClick('userProfile')}
@@ -70,10 +81,11 @@ const Navbar = () => {
             </p>
             <MdKeyboardArrowDown className="text-gray-400 text-14" />
           </div>
-        </TooltipComponent>
+        </TooltipComponent> */}
 
 
-        {isClicked.userProfile && (<UserProfile />)}
+        {/* {isClicked.userProfile && (<UserProfile />)} */}
+
       </div>
     </div>
   );
