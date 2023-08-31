@@ -57,20 +57,8 @@ export const links = [
         title: 'settings',
         links: [
             {
-                name: 'clients',
+                name: 'Genarel Settings',
                 icon: <BiUserCircle />,
-            },
-            {
-                name: 'marketing',
-                icon: <SiGooglemarketingplatform />,
-            },
-            {
-                name: 'human resource ',
-                icon: <AiOutlineUser />,
-            },
-            {
-                name: 'accounts',
-                icon: <MdManageAccounts />,
             },
         ],
     }
