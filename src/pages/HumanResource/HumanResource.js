@@ -3,7 +3,7 @@ import Header from '../../shared/Header/Header'
 
 const HumanResource = () => {
     return (
-        <div>
+        <div className='mt-20'>
             <Header category='Human Resources' title='Human Resources' />
         </div>
     )
