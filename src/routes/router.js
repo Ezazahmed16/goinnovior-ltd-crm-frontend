@@ -10,6 +10,8 @@ import Clients from "../pages/Clients/Clients";
 import HumanResource from "../pages/HumanResource/HumanResource";
 import Singin from '../shared/Singin/Singin'
 import Singup from '../shared/Singup/Singup'
+import ClientsInfo from "../pages/Clients/ClientsInfo/ClientsInfo";
+import Invoices from "../pages/Accounts/Invoices/Invoices";
 
 const router = createBrowserRouter([
     {
@@ -36,27 +38,27 @@ const router = createBrowserRouter([
             },
 
             {
-                path: '/clients',
-                element: <Clients />
+                path: '/clients-clientsInfo',
+                element: <ClientsInfo />
             },
             {
-                path: '/marketing',
+                path: '/marketing-leads',
                 element: <Leads />
             },
             {
-                path: '/human resource',
+                path: '/human-resource',
                 element: <HumanResource />
             },
             {
-                path: '/accounts',
-                element: <Leads></Leads>
+                path: '/accounts-invoice',
+                element: <Invoices></Invoices>
             },
             {
                 path: '/marketing/leads',
                 element: <Leads></Leads>
             },
             {
-                path: 'genarel settings',
+                path: '/admin/genarel-settings',
                 element: <GenarelSettings />
             },
         ]

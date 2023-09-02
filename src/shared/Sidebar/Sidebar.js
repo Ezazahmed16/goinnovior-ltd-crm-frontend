@@ -2,9 +2,15 @@ import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
-import { MdOutlineCancel } from 'react-icons/md';
-import { links } from './SidebarItems';
+import { MdManageAccounts, MdOutlineCancel, MdOutlineMedicalInformation } from 'react-icons/md';
 import { useStateContext } from '../../contexts/ContextProvider';
+import { BiSolidDashboard, BiSolidUserCircle, BiUserCircle } from 'react-icons/bi';
+import { AiOutlineCalendar, AiOutlineUser } from 'react-icons/ai';
+import { BsKanban } from 'react-icons/bs';
+import { FaFileInvoiceDollar } from 'react-icons/fa';
+import { GrUserSettings } from 'react-icons/gr';
+import { SiGoogleads, SiGooglemarketingplatform } from 'react-icons/si';
+import { FiSettings } from 'react-icons/fi';
 
 const Sidebar = () => {
     const { activeMenu, setActiveMenu, screenSize, currentColor } = useStateContext();
@@ -14,7 +20,7 @@ const Sidebar = () => {
 
     const handleCloseSideBar = () => {
         // Handle closing the sidebar
-        if(activeMenu && screenSize <= 900){
+        if (activeMenu && screenSize <= 900) {
             setActiveMenu(false)
         }
     };
@@ -40,8 +46,152 @@ const Sidebar = () => {
                                 </button>
                             </TooltipComponent>
                         </div>
+
+                        <div className="mt-5">
+                            <ul className="menu mr-5 rounded-box">
+                                <p className="text-gray-400 m-3 mt-4 uppercase">dashboard</p>
+                                <li>
+                                    <NavLink
+                                        className='py-2'
+                                        onClick={handleCloseSideBar}
+                                        style={({ isActive }) => ({
+                                            backgroundColor: isActive ? currentColor : ''
+                                        })} to='/dashboard'>
+                                        <BiSolidDashboard className='w-6 h-6' />
+                                        Dashboard
+                                    </NavLink>
+                                </li>
+
+                                <p className="text-gray-400 m-3 mt-4 uppercase">apps</p>
+                                <li className='mb-1'>
+                                    <NavLink
+                                        className='py-2'
+                                        onClick={handleCloseSideBar}
+                                        style={({ isActive }) => ({
+                                            backgroundColor: isActive ? currentColor : ''
+                                        })} to='/calendar'>
+                                        <AiOutlineCalendar className='w-6 h-6' />
+                                        Calendar
+                                    </NavLink>
+                                </li>
+                                <li className='mb-1'>
+                                    <NavLink
+                                        className='py-2'
+                                        onClick={handleCloseSideBar}
+                                        style={({ isActive }) => ({
+                                            backgroundColor: isActive ? currentColor : ''
+                                        })} to='/kanban'>
+                                        <BsKanban className='w-6 h-6' />
+                                        Kanban
+                                    </NavLink>
+                                </li>
+                                {/* ................Pages..........  */}
+                                <p className="text-gray-400 m-3 mt-4 uppercase">pages</p>
+                                <li className='mb-1'>
+                                    <details close>
+                                        <summary >
+                                            <SiGooglemarketingplatform className='w-6 h-6' />
+                                            Marketing</summary>
+                                        <ul>
+                                            <li>
+                                                <NavLink
+                                                    className='py-2'
+                                                    onClick={handleCloseSideBar}
+                                                    style={({ isActive }) => ({
+                                                        backgroundColor: isActive ? currentColor : ''
+                                                    })} to='/marketing-leads'
+                                                >
+                                                    <SiGoogleads className='w-6 h-6' />
+                                                    Leads
+                                                </NavLink>
+                                            </li>
+                                        </ul>
+                                    </details>
+                                </li>
+                                <li className='mb-1'>
+                                    <details close>
+                                        <summary >
+                                            <BiUserCircle className='w-6 h-6' />
+                                            Clients</summary>
+                                        <ul>
+                                            <li>
+                                                <NavLink
+                                                    className='py-2'
+                                                    onClick={handleCloseSideBar}
+                                                    style={({ isActive }) => ({
+                                                        backgroundColor: isActive ? currentColor : ''
+                                                    })} to='/clients-clientsInfo'
+                                                >
+                                                    <MdOutlineMedicalInformation className='w-6 h-6' />
+                                                    Clients Information
+                                                </NavLink>
+                                            </li>
+                                        </ul>
+                                    </details>
+                                </li>
+                                <li className='mb-1'>
+                                    <NavLink
+                                        className='py-2'
+                                        onClick={handleCloseSideBar}
+                                        style={({ isActive }) => ({
+                                            backgroundColor: isActive ? currentColor : ''
+                                        })} to='/human-resource'
+                                    >
+                                        <AiOutlineUser className='w-6 h-6' />
+                                        Human Resource
+                                    </NavLink>
+
+                                </li>
+                                <li className='mb-1'>
+                                    <details close>
+                                        <summary >
+                                            <MdManageAccounts className='w-6 h-6' />
+                                            Accounts</summary>
+                                        <ul>
+                                            <li>
+                                                <NavLink
+                                                    className='py-2'
+                                                    onClick={handleCloseSideBar}
+                                                    style={({ isActive }) => ({
+                                                        backgroundColor: isActive ? currentColor : ''
+                                                    })} to='/accounts-invoice'
+                                                >
+                                                    <FaFileInvoiceDollar className='w-6 h-6' />
+                                                    Invoices
+                                                </NavLink>
+                                            </li>
+                                        </ul>
+                                    </details>
+                                </li>
+
+                                {/* .........Admin Settings.......... */}
+                                <p className="text-gray-400 m-3 mt-4 uppercase">Settings</p>
+                                <li className='mb-1'>
+                                    <details close>
+                                        <summary >
+                                            <GrUserSettings className='w-6 h-6' />
+                                            Genarel Settings</summary>
+                                        <ul>
+                                            <li>
+                                                <NavLink
+                                                    className='py-2'
+                                                    onClick={handleCloseSideBar}
+                                                    style={({ isActive }) => ({
+                                                        backgroundColor: isActive ? currentColor : ''
+                                                    })} to='/admin/genarel-settings'
+                                                >
+                                                    <FiSettings className='w-6 h-6' />
+                                                    Genarel Settings
+                                                </NavLink>
+                                            </li>
+                                        </ul>
+                                    </details>
+                                </li>
+                            </ul>
+                        </div>
+
                         {/* Sidebar Menu */}
-                        <div className="mt-10">
+                        {/* <div className="mt-5">
                             {links.map((item) => (
                                 <div key={item.title}>
                                     <p className="text-gray-400 m-3 mt-4 uppercase">
@@ -63,12 +213,12 @@ const Sidebar = () => {
                                     ))}
                                 </div>
                             ))}
-                        </div>
+                        </div> */}
 
                     </>
                 )}
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
 

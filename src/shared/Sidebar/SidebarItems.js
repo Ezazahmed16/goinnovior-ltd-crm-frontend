@@ -43,7 +43,7 @@ export const links = [
                 icon: <SiGooglemarketingplatform />,
             },
             {
-                name: 'human resource ',
+                name: 'human-resource',
                 icon: <AiOutlineUser />,
             },
             {

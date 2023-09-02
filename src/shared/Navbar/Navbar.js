@@ -52,9 +52,9 @@ const Navbar = () => {
 
   const handleLogOut = () => {
     logOut()
-      .then(() => {
-        toast.warning("Successfully Logout")
-       })
+      .then((result) => {
+        toast.success("Successfully Logout")
+      })
       .catch(err => console.log(err));
   }
 
@@ -74,11 +74,15 @@ const Navbar = () => {
                 className="flex items-center gap-2 cursor-pointer p-1 hover:bg-light-gray rounded-lg"
                 onClick={() => handleClick('userProfile')}
               >
-                <img
-                  className="rounded-full w-8 h-8"
-                  src={avatar}
-                  alt="user-profile"
-                />
+                <div className="avatar">
+                  <div className="w-12 mx-2 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2" >
+                    <img
+                      className="rounded-full w-12 h-12"
+                      src={user.photoURL}
+                      alt="user-profile"
+                    />
+                  </div>
+                </div>
                 <p>
                   <span className="text-gray-400 text-14">Hi,</span>{' '}
                   <span className="text-gray-400 font-bold ml-1 text-14">
@@ -103,7 +107,7 @@ const Navbar = () => {
           </>
         ) : (
           <Link to='/singin'>
-            <button style={{ backgroundColor: currentColor }} className="btn text-white font-semibold">Login
+            <button style={{ backgroundColor: currentColor }} className="btn p-2">Login
               <AiOutlineLogin className='w-6 h-6' />
             </button>
           </Link>
