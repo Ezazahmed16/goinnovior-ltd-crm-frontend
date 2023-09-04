@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "name": "Hart Hagerty",
+        "position": "CEO",
+        "orgName": "XYZ Company",
+        "orgContactInfo": {
+            "email": "test112122@gmail.com",
+            "phone": "0162626262"
+        }
+    },
+    {
+        "id": 2,
+        "name": "John Doe",
+        "position": "Manager",
+        "orgName": "ABC Corporation",
+        "orgContactInfo": {
+            "email": "johndoe@gmail.com",
+            "phone": "0123456789"
+        }
+    },
+    {
+        "id": 3,
+        "name": "Alice Smith",
+        "position": "Marketing Director",
+        "orgName": "Smith Enterprises",
+        "orgContactInfo": {
+            "email": "alice.smith@example.com",
+            "phone": "9876543210"
+        }
+    }
+]

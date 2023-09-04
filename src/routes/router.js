@@ -12,6 +12,7 @@ import Singin from '../shared/Singin/Singin'
 import Singup from '../shared/Singup/Singup'
 import ClientsInfo from "../pages/Clients/ClientsInfo/ClientsInfo";
 import Invoices from "../pages/Accounts/Invoices/Invoices";
+import AddNewLead from "../pages/Marketing/Leads/AddNewLead";
 
 const router = createBrowserRouter([
     {
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
             {
                 path: '/marketing/leads',
                 element: <Leads></Leads>
+            },
+            {
+                path: '/marketing/leads/add',
+                element: <AddNewLead></AddNewLead>
             },
             {
                 path: '/admin/genarel-settings',
