@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { GrAdd } from 'react-icons/gr';
-import { CgWebsite } from 'react-icons/cg';
-import { BsWhatsapp, BsFacebook, BsLinkedin } from 'react-icons/bs';
+import { FaRegMoneyBillAlt } from 'react-icons/fa';
 import { RiArrowGoBackLine } from 'react-icons/ri';
 import { useForm, Controller } from 'react-hook-form';
 import { useStateContext } from '../../../contexts/ContextProvider';
@@ -48,7 +47,7 @@ const AddNewLead = () => {
                 {/* General Information */}
                 <div className="my-2">
                     <h3 style={{ backgroundColor: currentColor }} className="font-bold text-xl mb-2 p-2 text-center text-white">General Information</h3>
-                    <div className="md:flex justify-start gap-5 w-full">
+                    <div className="md:grid md:grid-cols-2 lg:grid-cols-4 gap-5 w-full">
                         {/* Name */}
                         <div className='w-full'>
                             <div className="label">
@@ -118,30 +117,64 @@ const AddNewLead = () => {
                             />
                             {errors.number && <p className="text-error">{errors.number.message}</p>}
                         </div>
+                        {/* Position */}
+                        <div className="form-control w-full max-w-xs">
+                            <label className="label">
+                                <span className="label-text">Position:</span>
+                            </label>
+                            <Controller
+                                name="position"
+                                control={control}
+                                defaultValue=""
+                                rules={{ required: 'Position is required' }}
+                                render={({ field }) => (
+                                    <select
+                                        className={`select select-bordered ${errors.position ? 'input-error' : ''}`}
+                                        {...field}
+                                    >
+                                        <option disabled selected value="">
+                                            Select Position
+                                        </option>
+                                        <option value="Position1">CEO</option>
+                                        <option value="Position2">Founder</option>
+                                        <option value="Position3">IT Head</option>
+                                        {/* Add more options as needed */}
+                                    </select>
+                                )}
+                            />
+                            {errors.position && <p className="text-error">{errors.position.message}</p>}
+                        </div>
+
                     </div>
                 </div>
 
                 {/* Company Information */}
                 <div className="mt-2">
-                    <h3 style={{ backgroundColor: currentColor }} className="font-bold text-xl mb-2 p-2 text-center text-white">Company Information:</h3>
-                    <div className="md:grid md:grid-cols-3 justify-start gap-5">
+                    <h3 style={{ backgroundColor: currentColor }} className="font-bold text-xl mb-2 p-2 text-center text-white">Company's Information:</h3>
+                    <div className="md:grid md:grid-cols-2 lg:grid-cols-4 justify-start gap-5">
                         {/* Company Name */}
-                        <div className='w-full'>
-                            <div className="label">
-                                <label className='label-text'>Company Name:</label>
-                            </div>
+                        <div className="form-control w-full max-w-xs">
+                            <label className="label">
+                                <span className="label-text">Company Name:</span>
+                            </label>
                             <Controller
                                 name="companyName"
                                 control={control}
                                 defaultValue=""
                                 rules={{ required: 'Company Name is required' }}
                                 render={({ field }) => (
-                                    <input
-                                        placeholder="Enter Your Company Name"
-                                        className={`input input-bordered input-success w-full  ${errors.companyName ? 'input-error' : ''}`}
-                                        type="text"
+                                    <select
+                                        className={`select select-bordered ${errors.companyName ? 'input-error' : ''}`}
                                         {...field}
-                                    />
+                                    >
+                                        <option disabled selected value="">
+                                            Select Company Name
+                                        </option>
+                                        <option value="Company1">Company 1</option>
+                                        <option value="Company2">bbdz 2</option>
+                                        <option value="Company3">xyz 3</option>
+                                        {/* Add more options as needed */}
+                                    </select>
                                 )}
                             />
                             {errors.companyName && <p className="text-error">{errors.companyName.message}</p>}
@@ -149,7 +182,7 @@ const AddNewLead = () => {
                         {/* Company Email */}
                         <div className='w-full'>
                             <div className="label">
-                                <label className='label-text'>Company Email:</label>
+                                <label className='label-text'>Company's Email:</label>
                             </div>
                             <Controller
                                 name="companyEmail"
@@ -176,7 +209,7 @@ const AddNewLead = () => {
                         {/* Company Number */}
                         <div className='w-full'>
                             <div className="label">
-                                <label className='label-text'>Company Number:</label>
+                                <label className='label-text'>Company's Number:</label>
                             </div>
                             <Controller
                                 name="companyNumber"
@@ -194,11 +227,10 @@ const AddNewLead = () => {
                             />
                             {errors.companyNumber && <p className="text-error">{errors.companyNumber.message}</p>}
                         </div>
-
                         {/* Company Whatsapp Number */}
                         <div className=''>
                             <div className="label">
-                                <label className='label-text'>Company WhatsApp Number:</label>
+                                <label className='label-text'>Company's WhatsApp Number:</label>
                             </div>
                             <div className="">
                                 <Controller
@@ -231,9 +263,17 @@ const AddNewLead = () => {
                             </div>
                         </div>
 
+                        {/* Company's Address */}
+                        <div className="md:col-span-2 lg:col-span-4">
+                            <div className="grid grid-cols-4">
+
+                            </div>
+                        </div>
+
+                        {/* Company Website  */}
                         <div className="">
                             <div className="label">
-                                <label className='label-text'>Company's Website:</label>
+                                <label className='label-text'>Company's Website URL:</label>
                             </div>
                             <Controller
                                 name="companyWebsite"
@@ -242,7 +282,7 @@ const AddNewLead = () => {
                                 render={({ field }) => (
                                     <input
                                         placeholder="Enter Company's Website"
-                                        className={`input input-bordered input-success w-full max-w-xs ${errors.companyWebsite ? 'input-error' : ''}`}
+                                        className={`input input-bordered input-success w-full ${errors.companyWebsite ? 'input-error' : ''}`}
                                         type="text"
                                         {...field}
                                     />
@@ -263,7 +303,7 @@ const AddNewLead = () => {
                                 render={({ field }) => (
                                     <input
                                         placeholder="Enter Company's Facebook Link"
-                                        className={`input input-bordered input-success w-full max-w-xs ${errors.companyFacebookLink ? 'input-error' : ''}`}
+                                        className={`input input-bordered input-success w-full ${errors.companyFacebookLink ? 'input-error' : ''}`}
                                         type="text"
                                         {...field}
                                     />
@@ -284,7 +324,7 @@ const AddNewLead = () => {
                                 render={({ field }) => (
                                     <input
                                         placeholder="Enter Company's LinkedIn Link"
-                                        className={`input input-bordered input-success w-full max-w-xs ${errors.companyLinkedInLink ? 'input-error' : ''}`}
+                                        className={`input input-bordered input-success w-full ${errors.companyLinkedInLink ? 'input-error' : ''}`}
                                         type="text"
                                         {...field}
                                     />
@@ -292,8 +332,37 @@ const AddNewLead = () => {
                             />
                             {errors.companyLinkedInLink && <p className="text-error">{errors.companyLinkedInLink.message}</p>}
                         </div>
+                    </div>
+                </div>
 
-
+                {/* Leads Information */}
+                <div className="my-2">
+                    <h3 style={{ backgroundColor: currentColor }} className="font-bold text-xl mb-2 p-2 text-center text-white">Lead Information</h3>
+                    <div className="md:grid md:grid-cols-2 lg:grid-cols-4 gap-5 w-full">
+                        {/* Lead */}
+                        <div className='w-full'>
+                            <div className="label">
+                                <label className='label-text'>Lead Value:</label>
+                            </div>
+                            <label className="input-group">
+                                <Controller
+                                    name="lead"
+                                    control={control}
+                                    defaultValue=""
+                                    rules={{ required: 'Lead is required' }}
+                                    render={({ field }) => (
+                                        <input
+                                            placeholder="Enter Lead"
+                                            className={`input input-bordered input-success w-full ${errors.lead ? 'input-error' : ''}`}
+                                            type="text"
+                                            {...field}
+                                        />
+                                    )}
+                                />
+                                <span> <FaRegMoneyBillAlt /> </span>
+                            </label>
+                            {errors.lead && <p className="text-error">{errors.lead.message}</p>}
+                        </div>
 
 
                     </div>
