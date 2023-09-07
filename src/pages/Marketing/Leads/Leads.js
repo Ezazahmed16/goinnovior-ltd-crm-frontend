@@ -11,6 +11,10 @@ const Leads = () => {
   const { currentColor } = useStateContext();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  // Find the root element of your React app, usually with an id of 'root'.
+  const rootElement = document.getElementById('root');
+  // Set the app element for React Modal.
+  Modal.setAppElement(rootElement);
 
   const openModal = () => {
     setIsModalOpen(true);

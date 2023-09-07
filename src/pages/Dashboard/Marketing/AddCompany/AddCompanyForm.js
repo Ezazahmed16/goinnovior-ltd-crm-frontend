@@ -39,7 +39,7 @@ const AddCompanyForm = () => {
                     <div className="form-field">
                         <label className="form-label">Company Name:</label>
                         <Controller
-                            name="companyType"
+                            name="companyName"
                             control={control}
                             defaultValue=""
                             rules={{ required: 'Company Name is required' }}

@@ -23,9 +23,9 @@ const CompanyList = () => {
                         {companyData.map((company, index) => (
                             <tr key={index}>
                                 <th>
-                                    <label>
+                                    {/* <label>
                                         <input type="checkbox" className="checkbox" />
-                                    </label>
+                                    </label> */}
                                 </th>
                                 <td>
                                     <div className="flex items-center space-x-3">
@@ -37,11 +37,11 @@ const CompanyList = () => {
                                 </td>
                                 <td>{company.location}</td>
                                 <td>
-                                    <a className="hover:underline" href={`mailto:${company.email}`}>
-                                        {company.contactNumber}
-                                    </a>
+                                    <span className="badge badge-ghost badge-sm">{company.contactNumber}</span>
                                     <br />
-                                    <span className="badge badge-ghost badge-sm">{company.email}</span>
+                                    <a className="hover:underline" href={`mailto:${company.email}`}>
+                                        {company.email}
+                                    </a>
                                 </td>
                                 <th>
                                     <div className="tooltip tooltip-bottom" data-tip="View">

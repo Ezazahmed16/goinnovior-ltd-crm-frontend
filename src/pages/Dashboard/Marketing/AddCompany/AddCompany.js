@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import Header from '../../../../shared/Header/Header'
 import { useStateContext } from '../../../../contexts/ContextProvider';
-import LeadsList from '../../../Marketing/Leads/LeadsList';
 import Modal from 'react-modal';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { GrAdd } from 'react-icons/gr';
@@ -11,6 +10,10 @@ import CompanyList from './CompanyList';
 const AddCompany = () => {
     const { currentColor } = useStateContext();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    // Find the root element of your React app, usually with an id of 'root'.
+    const rootElement = document.getElementById('root');
+    // Set the app element for React Modal.
+    Modal.setAppElement(rootElement);
     const openModal = () => {
         setIsModalOpen(true);
     };
