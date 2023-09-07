@@ -1,0 +1,52 @@
+[
+    {
+        "companyName": "ABC Tech Solutions",
+        "companyType": "Technology",
+        "location": "San Francisco, CA, USA",
+        "contactNumber": "+1 123-456-7890",
+        "whatsappNumber": "+1 987-654-3210",
+        "email": "info@abc-tech.com",
+        "linkedinLink": "https://www.linkedin.com/company/abc-tech",
+        "websiteLink": "https://www.abc-tech.com"
+    },
+    {
+        "companyName": "XYZ Pharmaceuticals",
+        "companyType": "Healthcare",
+        "location": "New York, NY, USA",
+        "contactNumber": "+1 212-555-1234",
+        "whatsappNumber": "+1 212-555-5678",
+        "email": "contact@xyzpharma.com",
+        "linkedinLink": "https://www.linkedin.com/company/xyz-pharma",
+        "websiteLink": "https://www.xyzpharma.com"
+    },
+    {
+        "companyName": "Global Finance Group",
+        "companyType": "Finance",
+        "location": "London, UK",
+        "contactNumber": "+44 20 1234 5678",
+        "whatsappNumber": "+44 20 9876 5432",
+        "email": "info@global-financegroup.co.uk",
+        "linkedinLink": "https://www.linkedin.com/company/global-finance-group",
+        "websiteLink": "https://www.global-financegroup.co.uk"
+    },
+    {
+        "companyName": "ABC Widgets Inc.",
+        "companyType": "Manufacturing",
+        "location": "Los Angeles, CA, USA",
+        "contactNumber": "+1 800-555-1234",
+        "whatsappNumber": "+1 800-555-5678",
+        "email": "contact@abcwidgets.com",
+        "linkedinLink": "https://www.linkedin.com/company/abc-widgets",
+        "websiteLink": "https://www.abcwidgets.com"
+    },
+    {
+        "companyName": "EduTech Solutions",
+        "companyType": "Education",
+        "location": "Toronto, Canada",
+        "contactNumber": "+1 416-123-4567",
+        "whatsappNumber": "+1 416-987-6543",
+        "email": "info@edutech-solutions.ca",
+        "linkedinLink": "https://www.linkedin.com/company/edutech-solutions",
+        "websiteLink": "https://www.edutech-solutions.ca"
+    }
+]

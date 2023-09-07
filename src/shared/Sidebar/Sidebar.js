@@ -9,7 +9,7 @@ import { AiOutlineCalendar, AiOutlineUser } from 'react-icons/ai';
 import { BsKanban } from 'react-icons/bs';
 import { FaFileInvoiceDollar } from 'react-icons/fa';
 import { GrUserSettings } from 'react-icons/gr';
-import { SiGoogleads, SiGooglemarketingplatform } from 'react-icons/si';
+import { SiGoogleads, SiGooglemarketingplatform, SiMarketo } from 'react-icons/si';
 import { FiSettings } from 'react-icons/fi';
 
 const Sidebar = () => {
@@ -48,7 +48,7 @@ const Sidebar = () => {
                         </div>
 
                         <div className="mt-5">
-                            <ul className="menu mr-5 rounded-box">
+                            <ul className="menu mr-5 rounded-box mb-10">
                                 <p className="text-gray-400 m-3 mt-4 uppercase">dashboard</p>
                                 <li>
                                     <NavLink
@@ -62,6 +62,7 @@ const Sidebar = () => {
                                     </NavLink>
                                 </li>
 
+                                {/* ................Apps..........  */}
                                 <p className="text-gray-400 m-3 mt-4 uppercase">apps</p>
                                 <li className='mb-1'>
                                     <NavLink
@@ -85,6 +86,7 @@ const Sidebar = () => {
                                         Kanban
                                     </NavLink>
                                 </li>
+
                                 {/* ................Pages..........  */}
                                 <p className="text-gray-400 m-3 mt-4 uppercase">pages</p>
                                 <li className='mb-1'>
@@ -170,9 +172,9 @@ const Sidebar = () => {
                                     <details close>
                                         <summary >
                                             <GrUserSettings className='w-6 h-6' />
-                                            Genarel Settings</summary>
-                                        <ul>
-                                            <li>
+                                            Settings</summary>
+                                        <ul className=''>
+                                            <li className='mb-1'>
                                                 <NavLink
                                                     className='py-2'
                                                     onClick={handleCloseSideBar}
@@ -184,6 +186,29 @@ const Sidebar = () => {
                                                     Genarel Settings
                                                 </NavLink>
                                             </li>
+
+                                            <li>
+                                                <details close>
+                                                    <summary >
+                                                        <SiMarketo className='w-6 h-6' />
+                                                        Marketing</summary>
+                                                    <ul>
+                                                        <li>
+                                                            <Link to='/admin/marketing-addCompany'>Add Company</Link>
+                                                        </li>
+                                                        <li>
+                                                            <Link to='/admin/marketing-companyType'>Add Company type</Link>
+                                                        </li>
+                                                        <li>
+                                                            <Link to='/admin/marketing-addPosition'>Add Position</Link>
+                                                        </li>
+                                                        <li>
+                                                            <Link to='/admin/marketing-addDepartment'>Add Department</Link>
+                                                        </li>
+                                                    </ul>
+                                                </details>
+                                            </li>
+
                                         </ul>
                                     </details>
                                 </li>

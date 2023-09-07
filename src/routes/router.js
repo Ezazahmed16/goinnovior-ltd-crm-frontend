@@ -13,6 +13,10 @@ import Singup from '../shared/Singup/Singup'
 import ClientsInfo from "../pages/Clients/ClientsInfo/ClientsInfo";
 import Invoices from "../pages/Accounts/Invoices/Invoices";
 import AddNewLead from "../pages/Marketing/Leads/AddNewLead";
+import AddCompany from "../pages/Dashboard/Marketing/AddCompany/AddCompany";
+import AddPosition from "../pages/Dashboard/Marketing/AddPosition/AddPosition";
+import AddDepartment from "../pages/Dashboard/Marketing/AddDepartment/AddDepartment";
+import AddCompanyType from "../pages/Dashboard/Marketing/AddCompanyType/AddCompanyType";
 
 const router = createBrowserRouter([
     {
@@ -65,6 +69,22 @@ const router = createBrowserRouter([
             {
                 path: '/admin/genarel-settings',
                 element: <GenarelSettings />
+            },
+            {
+                path: '/admin/marketing-addCompany',
+                element: <AddCompany />
+            },
+            {
+                path: '/admin/marketing-addPosition',
+                element: <AddPosition />
+            },
+            {
+                path: '/admin/marketing-companyType',
+                element: <AddCompanyType />
+            },
+            {
+                path: '/admin/marketing-addDepartment',
+                element: <AddDepartment />
             },
         ]
     },

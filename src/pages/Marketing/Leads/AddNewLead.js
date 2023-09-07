@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { GrAdd } from 'react-icons/gr';
 import { IoIosRemoveCircle } from 'react-icons/io';
 import { useForm, Controller } from 'react-hook-form';
@@ -41,16 +41,9 @@ const AddNewLead = () => {
 
 
     return (
-        <div className='m-2 md:m-10 mt-24 p-2 md:p-2 bg-main-bg rounded-3xl'>
+        <div className='m-2 md:m-10 mt-5 md:mt-24 p-2 md:p-2 bg-main-bg rounded-3xl'>
             <form onSubmit={handleSubmit(onSubmit)} className="w-full">
-                {/* <div className="underline" style={{ color: currentColor }}>
-                    <Link className='flex' to='/marketing/leads'>
-                        <RiArrowGoBackLine className='w-6 h-6 mx-2' />
-                        Go Back
-                    </Link>
-                </div> */}
-
-                <h3 style={{ backgroundColor: currentColor }} className="font-bold text-2xl my-2 text-center p-3 rounded-lg text-white ">Add a new lead</h3>
+                <h3 style={{ backgroundColor: currentColor }} className="font-bold text-xl md:text-2xl md:my-2 text-center p-3 rounded-lg text-white ">Add a new lead</h3>
                 <div className="divider"></div>
 
                 {/* General Information */}
@@ -125,33 +118,6 @@ const AddNewLead = () => {
                             />
                             {errors.email && <p className="text-error">{errors.email.message}</p>}
                         </div>
-                        {/* Number */}
-                        {/* <div className='w-full'>
-                            <div className="label">
-                                <label className='label-text'>Number:</label>
-                            </div>
-                            <Controller
-                                name="number"
-                                control={control}
-                                defaultValue=""
-                                rules={{
-                                    required: 'Number is required',
-                                    pattern: {
-                                        value: /^[0-9]+$/, // Regular expression for one or more digits
-                                        message: 'Invalid number format. Please enter digits only.',
-                                    },
-                                }}
-                                render={({ field }) => (
-                                    <input
-                                        placeholder="Enter Your Number"
-                                        className={`input input-bordered input-success w-full ${errors.number ? 'input-error' : ''}`}
-                                        type="text"
-                                        {...field}
-                                    />
-                                )}
-                            />
-                            {errors.number && <p className="text-error">{errors.number.message}</p>}
-                        </div> */}
                         {/* Number */}
                         <div className="">
 
@@ -242,7 +208,7 @@ const AddNewLead = () => {
                                 <span className="label-text">Company Name:</span>
                             </label>
                             <Controller
-                                name="companyName"
+                                name="companyType"
                                 control={control}
                                 defaultValue="" // Use defaultValue here
                                 rules={{ required: 'Company Name is required' }}
