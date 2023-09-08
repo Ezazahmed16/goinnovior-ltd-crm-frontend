@@ -61,5 +61,10 @@
     "eslint-plugin-react-hooks": "^4.3.0",
     "postcss": "^8.4.6",
     "tailwindcss": "^3.0.19"
-  }
+  },
+  "description": "return (\r         <div className='m-2 md:m-10 mt-24 p-2 md:p-2 bg-main-bg rounded-3xl'>\r             <form onSubmit={handleSubmit(onSubmit)} className=\"w-full\">\r                 <div className=\"underline\" style={{ color: currentColor }}>\r                     <Link className='flex' to='/marketing/leads'>\r                         <RiArrowGoBackLine className='w-6 h-6 mx-2' />\r                         Go Back\r                     </Link>\r                 </div>\r                 <h3 className=\"font-bold text-2xl mb-2 text-center\">Add a new lead</h3>\r                 <div className=\"divider\"></div>",
+  "main": "craco.config.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

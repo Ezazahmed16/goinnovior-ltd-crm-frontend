@@ -6,15 +6,16 @@ import { GrAdd } from 'react-icons/gr';
 import AddNewLead from './AddNewLead';
 import Modal from 'react-modal';
 import { AiFillCloseCircle } from 'react-icons/ai';
+import LeadsSearch from './LeadsSearch';
+import leadsData from './LeadsListFakeDB.json';
+import Pagination from '../../../components/Pagination/pagination';
 
 const Leads = () => {
   const { currentColor } = useStateContext();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // Find the root element of your React app, usually with an id of 'root'.
-  const rootElement = document.getElementById('root');
-  // Set the app element for React Modal.
-  Modal.setAppElement(rootElement);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -24,28 +25,41 @@ const Leads = () => {
     setIsModalOpen(false);
   };
 
+  const totalItems = leadsData.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
   return (
     <div className="m-2 md:m-10 mt-24 p-2 md:p-2 bg-main-bg rounded-3xl">
       <div className=''>
         <Header category='Marketing' title='Leads' />
       </div>
 
-      {/* Add A New Lead */}
-      <div className="my-2 flex justify-end">
-        <button
-          style={{ backgroundColor: currentColor }}
-          className="btn text-white"
-          onClick={openModal} // Open the modal when this button is clicked
-        >
-          <GrAdd className='w-4 h-4' />
-          Add Lead
-        </button>
+      <div className="flex items-center justify-between mb-5">
+        <LeadsSearch />
+
+        <div className="my-2 flex justify-end">
+          <button
+            style={{ backgroundColor: currentColor }}
+            className="btn text-white"
+            onClick={openModal}
+          >
+            <GrAdd className='w-4 h-4' />
+            Add Lead
+          </button>
+        </div>
       </div>
 
-      {/* Leads list table */}
-      <LeadsList />
-      {/* Leads list table */}
+      <LeadsList leadsData={leadsData} itemsPerPage={itemsPerPage} currentPage={currentPage} />
 
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
 
       <Modal
         isOpen={isModalOpen}

@@ -1,9 +1,15 @@
 import React from 'react';
 import { GrView } from 'react-icons/gr';
 import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
-import leadsData from './LeadsListFakeDB.json'
 
-const LeadsList = ({ data, columns }) => {
+const LeadsList = ({ leadsData, columns, itemsPerPage, currentPage }) => {
+    // Calculate the start and end index based on current page and items per page
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+
+    // Get the data for the current page
+    const currentData = leadsData.slice(startIndex, endIndex);
+
     return (
         <div>
             <div className="overflow-x-auto bg-base-200 p-5 rounded-xl">
@@ -19,8 +25,8 @@ const LeadsList = ({ data, columns }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {/* Map through leadsData and generate rows */}
-                        {leadsData.map((lead) => (
+                        {/* Map through currentData and generate rows */}
+                        {currentData.map((lead) => (
                             <tr key={lead.id}>
                                 <th>
                                     <label>
@@ -82,4 +88,3 @@ const LeadsList = ({ data, columns }) => {
 };
 
 export default LeadsList;
-
