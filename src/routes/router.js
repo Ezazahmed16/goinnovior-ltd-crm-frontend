@@ -6,10 +6,8 @@ import Error from "../shared/Error/Error";
 import Calendar from "../pages/Calendar/Calendar";
 import Kanban from "../pages/Kanban/Kanban";
 import GenarelSettings from "../pages/Dashboard/GenarelSettings/GenarelSettings";
-import Clients from "../pages/Clients/Clients";
 import HumanResource from "../pages/HumanResource/HumanResource";
 import Singin from '../shared/Singin/Singin'
-import Singup from '../shared/Singup/Singup'
 import ClientsInfo from "../pages/Clients/ClientsInfo/ClientsInfo";
 import Invoices from "../pages/Accounts/Invoices/Invoices";
 import AddNewLead from "../pages/Marketing/Leads/AddNewLead";
@@ -17,6 +15,8 @@ import AddCompany from "../pages/Dashboard/Marketing/AddCompany/AddCompany";
 import AddPosition from "../pages/Dashboard/Marketing/AddPosition/AddPosition";
 import AddDepartment from "../pages/Dashboard/Marketing/AddDepartment/AddDepartment";
 import AddCompanyType from "../pages/Dashboard/Marketing/AddCompanyType/AddCompanyType";
+import CreateUser from "../pages/Dashboard/GenarelSettings/CreateUser/CreateUser";
+import AllUser from "../pages/Dashboard/GenarelSettings/AllUser/AllUser";
 
 const router = createBrowserRouter([
     {
@@ -67,8 +67,12 @@ const router = createBrowserRouter([
                 element: <AddNewLead></AddNewLead>
             },
             {
-                path: '/admin/genarel-settings',
-                element: <GenarelSettings />
+                path: '/admin/genarel-settings/createUser',
+                element: <CreateUser />
+            },
+            {
+                path: '/admin/genarel-settings/allUsers',
+                element: <AllUser />
             },
             {
                 path: '/admin/marketing-addCompany',
@@ -91,11 +95,7 @@ const router = createBrowserRouter([
     {
         path: '/singin',
         element: <Singin />
-    },
-    {
-        path: '/singup',
-        element: <Singup></Singup>
-    },
+    }
 ]);
 
 export default router

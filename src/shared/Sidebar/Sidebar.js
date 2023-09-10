@@ -175,16 +175,19 @@ const Sidebar = () => {
                                             Settings</summary>
                                         <ul className=''>
                                             <li className='mb-1'>
-                                                <NavLink
-                                                    className='py-2'
-                                                    onClick={handleCloseSideBar}
-                                                    style={({ isActive }) => ({
-                                                        backgroundColor: isActive ? currentColor : ''
-                                                    })} to='/admin/genarel-settings'
-                                                >
-                                                    <FiSettings className='w-6 h-6' />
-                                                    Genarel Settings
-                                                </NavLink>
+                                                <details close>
+                                                    <summary >
+                                                        <FiSettings className='w-6 h-6' />
+                                                        Genarel Settings</summary>
+                                                    <ul>
+                                                        <li>
+                                                            <Link to='/admin/genarel-settings/createUser'>Create User</Link>
+                                                        </li>
+                                                        <li>
+                                                            <Link to='/admin/genarel-settings/allUsers'>All User</Link>
+                                                        </li>
+                                                    </ul>
+                                                </details>
                                             </li>
 
                                             <li>
@@ -215,30 +218,7 @@ const Sidebar = () => {
                             </ul>
                         </div>
 
-                        {/* Sidebar Menu */}
-                        {/* <div className="mt-5">
-                            {links.map((item) => (
-                                <div key={item.title}>
-                                    <p className="text-gray-400 m-3 mt-4 uppercase">
-                                        {item.title}
-                                    </p>
-                                    {item.links.map((link) => (
-                                        <NavLink
-                                            to={`/${link.name}`}
-                                            key={link.name}
-                                            onClick={handleCloseSideBar}
-                                            style={({isActive}) => ({
-                                                backgroundColor: isActive ? currentColor : ''
-                                            })}
-                                            className={({ isActive }) => (isActive ? activeLink : normalLink)}
-                                        >
-                                            {link.icon}
-                                            <span className="capitalize ">{link.name}</span>
-                                        </NavLink>
-                                    ))}
-                                </div>
-                            ))}
-                        </div> */}
+
 
                     </>
                 )}
