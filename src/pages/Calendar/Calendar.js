@@ -1,9 +1,11 @@
 import React, { } from 'react'
 import Header from '../../shared/Header/Header'
 import { ScheduleComponent, Day, Week, WorkWeek, Month, Agenda, Inject, Resize, DragAndDrop } from '@syncfusion/ej2-react-schedule';
+import { useAuth } from '../../contexts/AuthContext';
 
 const Calendar = () => {
 
+  const auth = useAuth();
 
   return (
     <div className=''>

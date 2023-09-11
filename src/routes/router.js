@@ -17,6 +17,8 @@ import AddDepartment from "../pages/Dashboard/Marketing/AddDepartment/AddDepartm
 import AddCompanyType from "../pages/Dashboard/Marketing/AddCompanyType/AddCompanyType";
 import CreateUser from "../pages/Dashboard/GenarelSettings/CreateUser/CreateUser";
 import AllUser from "../pages/Dashboard/GenarelSettings/AllUser/AllUser";
+import ProtectedRoute from "./ProtectedRoute";
+import { RequireAuth } from "react-auth-kit";
 
 const router = createBrowserRouter([
     {
@@ -35,7 +37,9 @@ const router = createBrowserRouter([
 
             {
                 path: '/calendar',
-                element: <Calendar />
+                element: <RequireAuth loginPath={'/singin'}>
+                    <Calendar />
+                </RequireAuth>
             },
             {
                 path: '/kanban',

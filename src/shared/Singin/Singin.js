@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import logo from '../../assets/logo.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Import useHistory for redirection
+import axios from 'axios';
+import { useSignIn } from 'react-auth-kit';
+import toast from 'react-hot-toast';
 
 const SignIn = () => {
   const [formData, setFormData] = useState({
-    email: '',
+    name: '',
     password: '',
   });
+  const signIn = useSignIn();
+  const navigate = useNavigate(); 
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -16,14 +21,39 @@ const SignIn = () => {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent the form from submitting normally
-    // Access the form data from the formData state
-    const { email, password } = formData;
-    // You can now use the email and password as needed, e.g., send them to an API
-    console.log('Email:', email);
-    console.log('Password:', password);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post('http://localhost:5000/user/login', {
+        name: formData.name,
+        password: formData.password,
+      });
+      if (response.status === 200) {
+        // Authentication successful
+        console.log('Authentication successful');
+        // Use the signIn function to authenticate the user
+        signIn({
+          token: response.data.token,
+          expiresIn: 7200,
+          tokenType: "Bearer",
+          authState: { name: formData.name },
+        });
+
+        // Redirect to a different page upon successful login
+        navigate('/'); // Change '/dashboard' to your desired route
+        toast.success('Authentication successful');
+      } else {
+        // Authentication failed
+        console.error('Authentication failed');
+        toast.error('Authentication failed');
+      }
+    } catch (error) {
+      console.error('Authentication error:', error);
+      toast.error('Authentication error');
+    }
   };
+
 
   return (
     <>
@@ -42,14 +72,14 @@ const SignIn = () => {
                 <form onSubmit={handleSubmit}>
                   <div className="form-control">
                     <label className="label">
-                      <span className="label-text">Email</span>
+                      <span className="label-text">Name</span>
                     </label>
                     <input
                       type="text"
-                      name="email"
-                      placeholder="Email"
+                      name="name"
+                      placeholder="Name"
                       className="input input-bordered"
-                      value={formData.email}
+                      value={formData.name}
                       onChange={handleInputChange}
                       required
                     />
