@@ -33,6 +33,7 @@ const CreateUser = () => {
             },
             onError: (error) => {
                 console.error('Error creating user:', error);
+                toast.error('Something is wrong. Name will be unique.')
             },
         }
     ); 

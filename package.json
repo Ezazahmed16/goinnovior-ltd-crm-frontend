@@ -23,6 +23,7 @@
     "react-icons": "^4.3.1",
     "react-modal": "^3.16.1",
     "react-query": "^3.39.3",
+    "react-rolebased-router": "^2.1.0",
     "react-router-dom": "^6.2.1",
     "react-scripts": "5.0.0",
     "react-select": "^5.7.4",

@@ -5,7 +5,6 @@ import Leads from "../pages/Marketing/Leads/Leads";
 import Error from "../shared/Error/Error";
 import Calendar from "../pages/Calendar/Calendar";
 import Kanban from "../pages/Kanban/Kanban";
-import GenarelSettings from "../pages/Dashboard/GenarelSettings/GenarelSettings";
 import HumanResource from "../pages/HumanResource/HumanResource";
 import Singin from '../shared/Singin/Singin'
 import ClientsInfo from "../pages/Clients/ClientsInfo/ClientsInfo";
@@ -17,13 +16,17 @@ import AddDepartment from "../pages/Dashboard/Marketing/AddDepartment/AddDepartm
 import AddCompanyType from "../pages/Dashboard/Marketing/AddCompanyType/AddCompanyType";
 import CreateUser from "../pages/Dashboard/GenarelSettings/CreateUser/CreateUser";
 import AllUser from "../pages/Dashboard/GenarelSettings/AllUser/AllUser";
-import ProtectedRoute from "./ProtectedRoute";
 import { RequireAuth } from "react-auth-kit";
+import RoleBasedRoute from "./RoleBasedRoute";
+import Unauthorized from "../shared/Unauthorized/Unauthorized";
+
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <Main></Main>,
+        element: <RequireAuth loginPath={'/singin'}>
+            <Main></Main>
+        </RequireAuth>,
         errorElement: <Error />,
         children: [
             {
@@ -34,12 +37,15 @@ const router = createBrowserRouter([
                 path: '/dashboard',
                 element: <Dashboard></Dashboard>
             },
+            {
+                path: '/unauthorized',
+                element: <Unauthorized></Unauthorized>
+            },
 
             {
                 path: '/calendar',
-                element: <RequireAuth loginPath={'/singin'}>
+                element:
                     <Calendar />
-                </RequireAuth>
             },
             {
                 path: '/kanban',
@@ -50,26 +56,41 @@ const router = createBrowserRouter([
                 path: '/clients-clientsInfo',
                 element: <ClientsInfo />
             },
-            {
-                path: '/marketing-leads',
-                element: <Leads />
-            },
+
             {
                 path: '/human-resource',
-                element: <HumanResource />
+                element: (
+                    <RoleBasedRoute
+                        path="/human-resource"
+                        element={<HumanResource />}
+                        requiredRoles={['hr', 'admin']} // Specify the required roles
+                    />
+                ),
             },
+
             {
                 path: '/accounts-invoice',
                 element: <Invoices></Invoices>
             },
+
+
             {
-                path: '/marketing/leads',
-                element: <Leads></Leads>
+                path: '/marketing-leads',
+                element: (
+                    <RoleBasedRoute
+                        path="/marketing-leads"
+                        element={<Leads />}
+                        requiredRoles={['admin', 'marketing']} // Specify the required roles
+                    />
+                ),
             },
+
             {
                 path: '/marketing/leads/add',
                 element: <AddNewLead></AddNewLead>
             },
+
+
             {
                 path: '/admin/genarel-settings/createUser',
                 element: <CreateUser />
@@ -94,11 +115,13 @@ const router = createBrowserRouter([
                 path: '/admin/marketing-addDepartment',
                 element: <AddDepartment />
             },
+
         ]
     },
     {
-        path: '/singin',
-        element: <Singin />
+        path: "/singin",
+        element: <Singin></Singin>,
+        errorElement: <Error />,
     }
 ]);
 

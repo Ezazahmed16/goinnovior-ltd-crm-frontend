@@ -1,67 +1,84 @@
 import React, { useState } from 'react';
 import Header from '../../../../shared/Header/Header';
 import { AiFillCloseCircle } from 'react-icons/ai';
-import { useStateContext } from '../../../../contexts/ContextProvider';
 import Modal from 'react-modal';
 import { GrAdd } from 'react-icons/gr';
 import CompanyTypeList from './CompanyTypeList';
+import axios from 'axios';
+import { useMutation, useQueryClient } from 'react-query';
+import { useStateContext } from '../../../../contexts/ContextProvider';
 
 const AddCompanyType = () => {
-    const { currentColor } = useStateContext();
+    const { currentColor } = useStateContext()
     const [isModalOpen, setIsModalOpen] = useState(false);
-    // Find the root element of your React app, usually with an id of 'root'.
     const rootElement = document.getElementById('root');
-    // Set the app element for React Modal.
     Modal.setAppElement(rootElement);
-    const openModal = () => {
-        setIsModalOpen(true);
-    };
-    const closeModal = () => {
-        setIsModalOpen(false);
-    };
 
-    // State to store the value of the company type input field
     const [companyType, setCompanyType] = useState('');
 
-    // Handle the input field change
     const handleCompanyTypeChange = (e) => {
         setCompanyType(e.target.value);
     };
 
-    // Handle the form submission
+    const queryClient = useQueryClient();
+
+    const postCompanyType = async (companyType) => {
+        try {
+            const response = await axios.post('http://localhost:5000/api/companyType', {
+                name: companyType, // Use the companyType string directly
+            });
+            if (response.status === 201) {
+                return response.data;
+            } else {
+                throw new Error('Failed to add company type');
+            }
+        } catch (error) {
+            throw new Error('Failed to add company type: ' + error.message);
+        }
+    };
+
+    const { mutate, isLoading, isError } = useMutation(postCompanyType, {
+        onSuccess: () => {
+            queryClient.invalidateQueries('companyTypes');
+            // closeModal();
+            setCompanyType('')
+        },
+    });
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Here, you can handle the submission of the company type data
-        console.log('Submitted Company Type:', companyType);
+        mutate(companyType);
+    };
 
-        // Clear the input field
-        setCompanyType('');
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
 
-        // Close the modal
-        closeModal();
+    const closeModal = () => {
+        setIsModalOpen(false);
     };
 
     return (
         <div>
             <div className="m-2 md:m-10 mt-14 p-2 md:p-2 bg-main-bg rounded-3xl">
-                <div className="mt-20">
-                    <Header category="Settings" title="Add Company Type" />
+                <div className="flex items-center justify-between">
+                    <div className="">
+                        <Header category="Settings" title="Add Company Type" />
+                    </div>
+
+                    <div className="">
+                        <button
+                            style={{ backgroundColor: currentColor }}
+                            className="btn text-white"
+                            onClick={openModal}
+                        >
+                            <GrAdd className="w-4 h-4" />
+                            Add Company Type
+                        </button>
+                    </div>
                 </div>
 
-                <div className="my-2 flex justify-end">
-                    <button
-                        style={{ backgroundColor: currentColor }}
-                        className="btn text-white"
-                        onClick={openModal} // Open the modal when this button is clicked
-                    >
-                        <GrAdd className="w-4 h-4" />
-                        Add Company Type
-                    </button>
-                </div>
-
-                {/* Company list table */}
                 <CompanyTypeList />
-                {/* Company list table */}
 
                 <Modal
                     isOpen={isModalOpen}
@@ -95,12 +112,17 @@ const AddCompanyType = () => {
                                 type="submit"
                                 style={{ backgroundColor: currentColor }}
                                 className="btn text-white"
+                                disabled={isLoading}
                             >
-                                Add Company Type
+                                {isLoading ? 'Adding...' : 'Add Company Type'}
                             </button>
+                            {isError && (
+                                <p className="text-red-500">{isError.message}</p>
+                            )}
                         </div>
                     </form>
                 </Modal>
+
             </div>
         </div>
     );

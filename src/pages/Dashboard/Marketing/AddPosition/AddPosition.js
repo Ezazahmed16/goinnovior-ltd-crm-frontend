@@ -7,6 +7,7 @@ import Modal from 'react-modal';
 import PositionList from './PositionList';
 
 const AddPosition = () => {
+
     const { currentColor } = useStateContext();
     const [isModalOpen, setIsModalOpen] = useState(false);
     // Find the root element of your React app, usually with an id of 'root'.
@@ -89,6 +90,8 @@ const AddPosition = () => {
                             required
                         />
                     </div>
+
+                    
                     <div className="text-center">
                         <button
                             type="submit"
