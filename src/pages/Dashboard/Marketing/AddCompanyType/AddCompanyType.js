@@ -7,6 +7,7 @@ import CompanyTypeList from './CompanyTypeList';
 import axios from 'axios';
 import { useMutation, useQueryClient } from 'react-query';
 import { useStateContext } from '../../../../contexts/ContextProvider';
+import toast from 'react-hot-toast';
 
 const AddCompanyType = () => {
     const { currentColor } = useStateContext()
@@ -42,6 +43,9 @@ const AddCompanyType = () => {
             queryClient.invalidateQueries('companyTypes');
             // closeModal();
             setCompanyType('')
+            setIsModalOpen(false);
+            toast.success('Successfully Added')
+
         },
     });
 

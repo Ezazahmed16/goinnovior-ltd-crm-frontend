@@ -1,66 +1,90 @@
-import React from 'react'
-import { AiFillDelete, AiFillEdit } from 'react-icons/ai'
+import React, { useState } from 'react';
+import axios from 'axios';
+import { QueryClient, useQuery } from 'react-query';
+import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
 
 const PositionList = () => {
-    const PositionData = [
-        {
-            name: 'CEO'
-        },
-        {
-            name: 'Founder'
-        },
-        {
-            name: 'IT Head'
-        },
-        {
-            name: 'Officer 1'
-        },
-        {
-            name: 'Developer'
+    const [deletingPositionId, setDeletingPositionId] = useState(null);
+
+    const fetchPositions = async () => {
+        try {
+            const response = await axios.get('http://localhost:5000/api/add-positions');
+            return response.data;
+        } catch (error) {
+            throw new Error('Failed to fetch positions: ' + error.message);
         }
-    ]
+    };
+
+    const queryClient = new QueryClient();
+
+    const { data: positionData, isLoading, isError, refetch } = useQuery(
+        'positions',
+        fetchPositions
+    );
+
+    const deletePosition = async (positionId) => {
+        try {
+            setDeletingPositionId(positionId);
+
+            await axios.delete(`http://localhost:5000/api/add-positions/${positionId}`);
+
+            setDeletingPositionId(null);
+
+            refetch();
+        } catch (error) {
+            setDeletingPositionId(null);
+            console.error('Error deleting position:', error);
+        }
+    };
+
     return (
         <div>
-            <div className="overflow-x-auto bg-base-200 p-5 rounded-xl">
+            {isLoading ? (
+                <p className="text-center">
+                    <span className="loading loading-ring loading-lg"></span>
+                </p>
+            ) : isError ? (
+                <p>Error fetching positions</p>
+            ) : (
                 <table className="table">
-                    {/* head */}
                     <thead>
                         <tr>
                             <th>Position Name</th>
                             <th>Action</th>
                         </tr>
                     </thead>
+
                     <tbody>
-                        {/* Map through companysData and generate rows */}
-                        {PositionData.map((position, index) => (
-                            <tr key={index}>
-                                <td>{position.name}</td>
+                        {positionData.map((position) => (
+                            <tr key={position._id}>
+                                <td className="">{position.positionName}</td>
                                 <th>
                                     <div className="tooltip tooltip-bottom mx-1" data-tip="Edit">
                                         <button>
                                             <AiFillEdit className="w-5 h-5" />
                                         </button>
                                     </div>
+
                                     <div className="tooltip tooltip-bottom" data-tip="Delete">
-                                        <button>
-                                            <AiFillDelete className="w-5 h-5" />
-                                        </button>
+                                        {deletingPositionId === position._id ? (
+                                            <span className="loading loading-sm"></span>
+                                        ) : (
+                                            <button
+                                                onClick={() => deletePosition(position._id)}
+                                                disabled={deletingPositionId === position._id}
+                                            >
+                                                <AiFillDelete className="w-5 h-5" />
+                                            </button>
+                                        )}
                                     </div>
                                 </th>
                             </tr>
                         ))}
                     </tbody>
-                    {/* foot */}
-                    <tfoot>
-                        <tr>
-                            <th>Position Name</th>
-                            <th>Action</th>
-                        </tr>
-                    </tfoot>
                 </table>
-            </div>
+            )}
         </div>
-    )
-}
+    );
+};
 
-export default PositionList
+export default PositionList;
