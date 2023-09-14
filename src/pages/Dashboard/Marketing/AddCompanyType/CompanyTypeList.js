@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { QueryClient, useQuery } from 'react-query'; // Import QueryClient
 import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
+import toast from 'react-hot-toast';
 
 const AddCompanyType = () => {
     const [deletingItemId, setDeletingItemId] = useState(null);
@@ -29,7 +30,7 @@ const AddCompanyType = () => {
             setDeletingItemId(companyId);
 
             await axios.delete(`http://localhost:5000/api/companyType/${companyId}`);
-
+            toast.success('Successfully Deleted')
             setDeletingItemId(null);
 
             refetch();

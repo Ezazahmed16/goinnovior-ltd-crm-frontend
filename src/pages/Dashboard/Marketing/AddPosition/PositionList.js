@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { QueryClient, useQuery } from 'react-query';
 import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
+import toast from 'react-hot-toast';
 
 const PositionList = () => {
     const [deletingPositionId, setDeletingPositionId] = useState(null);
@@ -28,8 +29,8 @@ const PositionList = () => {
 
             await axios.delete(`http://localhost:5000/api/add-positions/${positionId}`);
 
+            toast.success('Successfully Delete')
             setDeletingPositionId(null);
-
             refetch();
         } catch (error) {
             setDeletingPositionId(null);
