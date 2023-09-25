@@ -19,6 +19,7 @@ import AllUser from "../pages/Dashboard/GenarelSettings/AllUser/AllUser";
 import { RequireAuth } from "react-auth-kit";
 import RoleBasedRoute from "./RoleBasedRoute";
 import Unauthorized from "../shared/Unauthorized/Unauthorized";
+import ResumeAdd from "../pages/HumanResource/ResumeAdd/Resume";
 
 
 const router = createBrowserRouter([
@@ -63,7 +64,17 @@ const router = createBrowserRouter([
                     <RoleBasedRoute
                         path="/human-resource"
                         element={<HumanResource />}
-                        requiredRoles={['hr', 'admin']} // Specify the required roles
+                        requiredRoles={['hr', 'admin']}
+                    />
+                ),
+            },
+            {
+                path: '/human-resource/recruitment/add-resume',
+                element: (
+                    <RoleBasedRoute
+                        path="/human-resource/recruitment/add-resume"
+                        element={<ResumeAdd />}
+                        requiredRoles={['hr', 'admin']}
                     />
                 ),
             },
@@ -80,7 +91,7 @@ const router = createBrowserRouter([
                     <RoleBasedRoute
                         path="/marketing-leads"
                         element={<Leads />}
-                        requiredRoles={['admin', 'marketing']} // Specify the required roles
+                        requiredRoles={['admin', 'marketing']}
                     />
                 ),
             },

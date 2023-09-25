@@ -1,14 +1,42 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { GrView } from 'react-icons/gr';
 import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
+import { useMutation, useQueryClient } from 'react-query'; // Import useMutation and useQueryClient
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
-const LeadsList = ({ leadsData, columns, itemsPerPage, currentPage }) => {
-    // Calculate the start and end index based on current page and items per page
+const LeadsList = ({ leadsData, itemsPerPage, currentPage }) => {
+    const queryClient = useQueryClient(); // Initialize the query client
+
+
+    const deleteLeadMutation = useMutation(
+        async (leadId) => {
+            await axios.delete(`http://localhost:5000/api/leads/${leadId}`);
+        },
+        {
+            onMutate: (leadId) => {
+                const snapshot = queryClient.getQueryData('leads'); // Get data using the query client
+                queryClient.setQueryData('leads', (prevData) => {
+                    return prevData.filter((lead) => lead.id !== leadId);
+                });
+                return { snapshot };
+            },
+            onSuccess: () => {
+                toast.success('Successfully Deleted');
+                queryClient.invalidateQueries('leads'); // Refetch 'leads' query after successful deletion
+                // setLoadingButtonId(null); // Reset the button in loading state
+
+            },
+        }
+    );
+
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
+    const currentData = leadsData?.slice(startIndex, endIndex);
 
-    // Get the data for the current page
-    const currentData = leadsData.slice(startIndex, endIndex);
+    const handleDelete = (leadId) => {
+        deleteLeadMutation.mutate(leadId);
+    };
 
     return (
         <div>
@@ -25,7 +53,6 @@ const LeadsList = ({ leadsData, columns, itemsPerPage, currentPage }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {/* Map through currentData and generate rows */}
                         {currentData.map((lead) => (
                             <tr key={lead.id}>
                                 <th>
@@ -36,20 +63,20 @@ const LeadsList = ({ leadsData, columns, itemsPerPage, currentPage }) => {
                                 <td>
                                     <div className="flex items-center space-x-3">
                                         <div>
-                                            <div className="font-bold">{lead.name}</div>
+                                            <div className="font-bold">{lead.fullName}</div>
                                             <div className="text-sm opacity-50">{lead.position}</div>
                                         </div>
                                     </div>
                                 </td>
-                                <td>{lead.orgName}</td>
+                                <td>{lead.companyName}</td>
                                 <td>
-                                    <a className='hover:underline' href={`mailto:${lead.orgContactInfo.email}`}>
-                                        {lead.orgContactInfo.email}
-                                    </a>
-                                    <br />
                                     <span className="badge badge-ghost badge-sm">
-                                        {lead.orgContactInfo.phone}
+                                        {lead.phoneNumbers}
                                     </span>
+                                    <br />
+                                    <a className='hover:underline' href={`mailto:${lead.email}`}>
+                                        {lead.email}
+                                    </a>
                                 </td>
                                 <th>
                                     <div className="tooltip tooltip-bottom" data-tip="View">
@@ -57,16 +84,19 @@ const LeadsList = ({ leadsData, columns, itemsPerPage, currentPage }) => {
                                             <GrView className="w-5 h-5" />
                                         </button>
                                     </div>
+
                                     <div className="tooltip tooltip-bottom mx-1" data-tip="Edit">
                                         <button>
                                             <AiFillEdit className="w-5 h-5" />
                                         </button>
                                     </div>
+
                                     <div className="tooltip tooltip-bottom" data-tip="Delete">
-                                        <button>
-                                            <AiFillDelete className="w-5 h-5" />
+                                        <button onClick={() => handleDelete(lead._id)} disabled={deleteLeadMutation.isLoading}>
+                                            {deleteLeadMutation.isLoading ? 'Deleting...' : <AiFillDelete className="w-5 h-5" />}
                                         </button>
                                     </div>
+
                                 </th>
                             </tr>
                         ))}

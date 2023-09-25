@@ -24,7 +24,7 @@ const AllUser = () => {
         onSuccess: () => {
             toast.success('User deleted successfully');
             console.log('User deleted successfully');
-            queryClient.invalidateQueries('users'); // Use invalidateQueries to trigger a refetch
+            queryClient.invalidateQueries('users'); 
             setDeletingUserId(null); // Reset the deletingUserId state
         },
     });
@@ -89,11 +89,11 @@ const AllUser = () => {
                                     <td>
                                         <div className="tooltip tooltip-bottom" data-tip="Delete">
                                             <button
-                                                onClick={() => handleDeleteUser(user._id)} // Pass user._id as an argument
-                                                disabled={deletingUserId === user._id} // Disable the button when deleting this user
+                                                onClick={() => handleDeleteUser(user._id)} 
+                                                disabled={deletingUserId === user._id} 
                                             >
                                                 {deletingUserId === user._id ? (
-                                                    <span className="loading loading-xs"></span> // Show loading indicator
+                                                    <span className="loading loading-xs"></span> 
                                                 ) : (
                                                     <AiFillDelete className="w-5 h-5" />
                                                 )}

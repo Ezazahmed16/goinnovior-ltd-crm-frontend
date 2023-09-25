@@ -4,10 +4,11 @@ import logo from '../../assets/logo.png';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import { MdManageAccounts, MdOutlineCancel, MdOutlineMedicalInformation } from 'react-icons/md';
 import { useStateContext } from '../../contexts/ContextProvider';
-import { BiSolidDashboard, BiSolidUserCircle, BiUserCircle } from 'react-icons/bi';
+import { BiSolidDashboard, BiUserCircle } from 'react-icons/bi';
 import { AiOutlineCalendar, AiOutlineUser } from 'react-icons/ai';
-import { BsKanban } from 'react-icons/bs';
+import { BsHandbagFill, BsKanban } from 'react-icons/bs';
 import { FaFileInvoiceDollar } from 'react-icons/fa';
+import { TbBrandSuperhuman } from 'react-icons/tb';
 import { GrUserSettings } from 'react-icons/gr';
 import { SiGoogleads, SiGooglemarketingplatform, SiMarketo } from 'react-icons/si';
 import { FiSettings } from 'react-icons/fi';
@@ -15,16 +16,12 @@ import { FiSettings } from 'react-icons/fi';
 const Sidebar = () => {
     const { activeMenu, setActiveMenu, screenSize, currentColor } = useStateContext();
 
-    const activeLink = 'flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg  text-white  text-md m-2';
-    const normalLink = 'flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg text-md text-gray-700 dark:text-gray-200 dark:hover:text-black hover:bg-light-gray m-2';
-
     const handleCloseSideBar = () => {
         // Handle closing the sidebar
         if (activeMenu && screenSize <= 900) {
             setActiveMenu(false)
         }
     };
-
 
 
     return (
@@ -133,19 +130,70 @@ const Sidebar = () => {
                                         </ul>
                                     </details>
                                 </li>
-                                <li className='mb-1'>
-                                    <NavLink
-                                        className='py-2'
-                                        onClick={handleCloseSideBar}
-                                        style={({ isActive }) => ({
-                                            backgroundColor: isActive ? currentColor : ''
-                                        })} to='/human-resource'
-                                    >
-                                        <AiOutlineUser className='w-6 h-6' />
-                                        Human Resource
-                                    </NavLink>
 
+                                {/* HR ========================= */}
+                                <li className='mb-1'>
+                                    <details close>
+                                        <summary >
+                                            <TbBrandSuperhuman className='w-6 h-6' />
+                                            HR</summary>
+                                        <ul className=''>
+                                            <li className='mb-1'>
+                                                <details close>
+                                                    <summary >
+                                                        <BsHandbagFill className='w-6 h-6' />
+                                                        Recruitment Manegment</summary>
+                                                    <ul>
+                                                        <li>
+                                                            <Link>
+                                                                Recruitment Poster
+                                                            </Link>
+                                                        </li>
+                                                        <li>
+                                                            <Link to='/human-resource/recruitment/add-resume'>
+                                                                Resume Add
+                                                            </Link>
+                                                        </li>
+                                                        <li>
+                                                            <Link>
+                                                                Interview manegment
+                                                            </Link>
+                                                        </li>
+                                                        <li>
+                                                            <Link>
+                                                                Position manegment
+                                                            </Link>
+                                                        </li>
+                                                    </ul>
+                                                </details>
+                                            </li>
+
+                                            {/* <li>
+                                                <details close>
+                                                    <summary >
+                                                        <SiMarketo className='w-6 h-6' />
+                                                        Marketing</summary>
+                                                    <ul>
+                                                        <li>
+                                                            <Link to='/admin/marketing-addCompany'>Add Company</Link>
+                                                        </li>
+                                                        <li>
+                                                            <Link to='/admin/marketing-companyType'>Add Company type</Link>
+                                                        </li>
+                                                        <li>
+                                                            <Link to='/admin/marketing-addPosition'>Add Position</Link>
+                                                        </li>
+                                                        <li>
+                                                            <Link to='/admin/marketing-addDepartment'>Add Department</Link>
+                                                        </li>
+                                                    </ul>
+                                                </details>
+                                            </li> */}
+
+                                        </ul>
+                                    </details>
                                 </li>
+
                                 <li className='mb-1'>
                                     <details close>
                                         <summary >
@@ -169,7 +217,7 @@ const Sidebar = () => {
                                 </li>
 
                                 {/* .........Admin Settings.......... */}
-                                <p className="text-gray-400 m-3 mt-4 uppercase">Settings</p>
+                                <p className="text-gray-400 m-3 mt-4 uppercase">Master Settings</p>
                                 <li className='mb-1'>
                                     <details close>
                                         <summary >

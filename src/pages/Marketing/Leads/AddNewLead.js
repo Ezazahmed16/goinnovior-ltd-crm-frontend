@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { GrAdd } from 'react-icons/gr';
 import toast from 'react-hot-toast';
 import { useForm, Controller } from 'react-hook-form';
@@ -18,28 +18,98 @@ const AddNewLead = () => {
     const queryClient = useQueryClient();
 
     const addLeadMutation = useMutation((data) =>
-        axios.post('http://localhost:5000/leads', data)
+        axios.post('http://localhost:5000/api/leads', data)
     );
 
+    // State to store company, department, and position data
+    const [companyOptions, setCompanyOptions] = useState([]);
+    const [departmentOptions, setDepartmentOptions] = useState([]);
+    const [positionOptions, setPositionOptions] = useState([]);
+    const [companyTypeOptions, setCompanyTypeOptions] = useState([]);
+console.log(companyOptions)
+
+    // Function to fetch company data
+    const fetchCompanyData = async () => {
+        try {
+            const response = await axios.get('http://localhost:5000/api/companies'); // Replace with your API endpoint
+            const options = response.data.map((company) => ({
+                value: company._id, // Changed "id" to "_id"
+                label: company.companyName,
+            }));
+            setCompanyOptions(options);
+        } catch (error) {
+            console.error('Error fetching company data:', error);
+        }
+    };
+
+    // Function to fetch company type data
+    const fetchCompanyTypeData = async () => { // Changed the function name
+        try {
+            const response = await axios.get('http://localhost:5000/api/companyType'); // Replace with your API endpoint
+            const options = response.data.map((company) => ({
+                value: company._id, // Changed "id" to "_id"
+                label: company.name,
+            }));
+            setCompanyTypeOptions(options); // Changed the state variable name
+        } catch (error) {
+            console.error('Error fetching company type data:', error); // Changed the log message
+        }
+    };
+
+    // Function to fetch department data
+    const fetchDepartmentData = async () => {
+        try {
+            const response = await axios.get('http://localhost:5000/api/departments'); // Replace with your API endpoint
+            const options = response.data.map((department) => ({
+                value: department._id, // Changed "id" to "_id"
+                label: department.departmentName,
+            }));
+            setDepartmentOptions(options);
+        } catch (error) {
+            console.error('Error fetching department data:', error);
+        }
+    };
+
+    // Function to fetch position data
+    const fetchPositionData = async () => {
+        try {
+            const response = await axios.get('http://localhost:5000/api/add-positions'); // Replace with your API endpoint
+            const options = response.data.map((position) => ({
+                value: position._id, // Changed "id" to "_id"
+                label: position.positionName,
+            }));
+            setPositionOptions(options);
+        } catch (error) {
+            console.error('Error fetching position data:', error);
+        }
+    };
+
+
+    // Fetch company, department, and position data when the component mounts
+    useEffect(() => {
+        fetchCompanyData();
+        fetchCompanyTypeData(); // Changed the function name
+        fetchDepartmentData();
+        fetchPositionData();
+    }, []); 
+
     const onAddLead = async (data) => {
-        console.log('Lead Data:', data);
         try {
             // Calculate the fullName by combining first and last names
             const fullName = `${data.firstname} ${data.lastname}`;
-    
+
             // Use the mutation function to add the lead with the calculated fullName
             await addLeadMutation.mutateAsync({
                 ...data,
                 fullname: fullName,
             });
-            toast.success('Lead added successfully')
+            toast.success('Lead added successfully');
             // Refetch the leads data after adding a new lead
             queryClient.invalidateQueries('leads');
         } catch (error) {
             console.error('Error adding lead:', error);
         }
     };
-    
 
     const onSubmit = async (data) => {
         try {
@@ -53,15 +123,8 @@ const AddNewLead = () => {
         }
     };
 
-    const selectOptions = [
-        { value: 'Company1', label: 'Company 1' },
-        { value: 'Company2', label: 'Company 2' },
-        { value: 'Company3', label: 'Company 3' },
-        // Add more options as needed
-    ];
-
     return (
-        <div className='m-2 md:m-10 md:mt-24 p-2 md:p-2 bg-main-bg rounded-3xl'>
+        <div className='m-2 md:m-10 md:mt-5 p-2 md:p-2 bg-main-bg rounded-3xl'>
             <form onSubmit={handleSubmit(onSubmit)} className='w-full'>
                 <h3
                     style={{ backgroundColor: currentColor }}
@@ -220,6 +283,7 @@ const AddNewLead = () => {
                                 <p className='text-error'>{errors.whatsappNumber.message}</p>
                             )}
                         </div>
+
                         {/* Company Name */}
                         <div className='form-control w-full'>
                             <label htmlFor='companyName' className='label'>
@@ -240,8 +304,8 @@ const AddNewLead = () => {
                                         <option disabled value=''>
                                             Select Company Name
                                         </option>
-                                        {selectOptions.map((option) => (
-                                            <option key={option.value} value={option.value}>
+                                        {companyOptions.map((option) => (
+                                            <option key={option.value} value={option.label}>
                                                 {option.label}
                                             </option>
                                         ))}
@@ -250,6 +314,39 @@ const AddNewLead = () => {
                             />
                             {errors.companyName && (
                                 <p className='text-error'>{errors.companyName.message}</p>
+                            )}
+                        </div>
+
+                        {/* Company Type */}
+                        <div className='form-control w-full'>
+                            <label htmlFor='companyType' className='label'>
+                                <span className='label-text'>Company Type:</span>
+                            </label>
+                            <Controller
+                                name='companyType'
+                                control={control}
+                                defaultValue=''
+                                rules={{ required: 'Company Type is required' }}
+                                render={({ field }) => (
+                                    <select
+                                        id='companyType'
+                                        className={`select select-bordered ${errors.companyType ? 'input-error' : ''
+                                            }`}
+                                        {...field}
+                                    >
+                                        <option disabled value=''>
+                                            Select Company Type
+                                        </option>
+                                        {companyTypeOptions.map((option) => (
+                                            <option key={option.value} value={option.lable}>
+                                                {option.label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                )}
+                            />
+                            {errors.companyType && (
+                                <p className='text-error'>{errors.companyType.message}</p>
                             )}
                         </div>
 
@@ -265,17 +362,17 @@ const AddNewLead = () => {
                                 rules={{ required: 'Department is required' }}
                                 render={({ field }) => (
                                     <select
-                                        className={`select select-bordered ${errors.department ? 'input-error' : ''
-                                            }`}
+                                        className={`select select-bordered ${errors.department ? 'input-error' : ''}`}
                                         {...field}
                                     >
                                         <option disabled value=''>
                                             Select Department
                                         </option>
-                                        <option value='Department1'>Department1</option>
-                                        <option value='Department2'>Department2</option>
-                                        <option value='Department3'>Department3</option>
-                                        {/* Add more options as needed */}
+                                        {departmentOptions.map((option) => (
+                                            <option key={option.value} value={option.label}>
+                                                {option.label}
+                                            </option>
+                                        ))}
                                     </select>
                                 )}
                             />
@@ -303,10 +400,11 @@ const AddNewLead = () => {
                                         <option disabled value=''>
                                             Select Position
                                         </option>
-                                        <option value='Position1'>CEO</option>
-                                        <option value='Position2'>Founder</option>
-                                        <option value='Position3'>IT Head</option>
-                                        {/* Add more options as needed */}
+                                        {positionOptions.map((option) => (
+                                            <option key={option.value} value={option.lable}>
+                                                {option.label}
+                                            </option>
+                                        ))}
                                     </select>
                                 )}
                             />
@@ -314,6 +412,7 @@ const AddNewLead = () => {
                                 <p className='text-error'>{errors.position.message}</p>
                             )}
                         </div>
+                        
                     </div>
                 </div>
 

@@ -1,6 +1,5 @@
-import React, { useContext, useEffect } from 'react';
-import { AiOutlineMenu, AiOutlineLogout } from 'react-icons/ai';
-import { MdKeyboardArrowDown } from 'react-icons/md';
+import React, { useEffect } from 'react';
+import { AiOutlineMenu } from 'react-icons/ai';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import { AiOutlineLogin } from 'react-icons/ai';
 import { useStateContext } from '../../contexts/ContextProvider';
