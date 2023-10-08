@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useStateContext } from '../../contexts/ContextProvider';
 import { GrTrash } from 'react-icons/gr';
 import Select from 'react-select';
-
+import toast from 'react-hot-toast';
 const NewInvoice = () => {
   const { currentColor } = useStateContext();
 
@@ -17,13 +17,13 @@ const NewInvoice = () => {
     { value: 'company2', label: 'Company 2' },
     // Add more options as needed
   ];
-  
+
   const paymentTermOptions = [
     { value: 'term1', label: 'Term 1' },
     { value: 'term2', label: 'Term 2' },
     // Add more options as needed
   ];
-  
+
   const poReferenceOptions = [
     { value: 'ref1', label: 'Reference 1' },
     { value: 'ref2', label: 'Reference 2' },
@@ -86,7 +86,7 @@ const NewInvoice = () => {
       }));
     }
   };
-  
+
 
   // Handle item changes
   const handleItemChange = (index, field, value) => {
@@ -119,19 +119,59 @@ const NewInvoice = () => {
 
 
   // Handle Company Name, Payment Term, and PO Reference changes
+  // Handle form input changes
   const handleSelectChange = (field, selectedOption) => {
-    setInvoiceData((prevData) => ({
-      ...prevData,
-      [field]: selectedOption.value, // Assuming the selectedOption has a 'value' property
-    }));
+    if (field === 'termsAndConditions') {
+      // If it's the termsAndConditions field, update it as an array of strings
+      const selectedTerms = selectedOption.map((option) => option.value);
+      setInvoiceData((prevData) => ({
+        ...prevData,
+        [field]: selectedTerms,
+      }));
+    } else {
+      // For other fields, update them as usual
+      setInvoiceData((prevData) => ({
+        ...prevData,
+        [field]: selectedOption.value,
+      }));
+    }
   };
 
-  // Handle form submission
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log('Submitted Invoice Data:', invoiceData);
+    // Extract the values from the selected terms and conditions options
+    const selectedTerms = invoiceData.termsAndConditions.map((option) => option.value);
+
+    // Create a new object with the extracted terms
+    const updatedInvoiceData = {
+      ...invoiceData,
+      termsAndConditions: selectedTerms,
+    };
+
+    try {
+      const response = await fetch('http://localhost:5000/api/invoices', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedInvoiceData), // Send the updated data
+      });
+
+      if (response.ok) {
+        toast.success('Successfully Created')
+        console.log('Invoice submitted successfully');
+      } else {
+        console.error('Error submitting invoice');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+
+    console.log('Submitted Invoice Data:', updatedInvoiceData); // Log the updated data
   };
+
 
   return (
     <div>
