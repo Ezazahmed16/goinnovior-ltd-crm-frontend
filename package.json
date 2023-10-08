@@ -14,9 +14,11 @@
     "@syncfusion/ej2-react-richtexteditor": "^19.4.50",
     "@syncfusion/ej2-react-schedule": "^19.4.50",
     "axios": "^1.5.0",
+    "emailjs-com": "^3.2.0",
     "react": "^17.0.2",
     "react-auth-kit": "^2.12.6",
     "react-country-state-city": "^1.0.9",
+    "react-datepicker": "^4.18.0",
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.46.0",
     "react-hot-toast": "^2.4.1",
@@ -26,7 +28,7 @@
     "react-rolebased-router": "^2.1.0",
     "react-router-dom": "^6.2.1",
     "react-scripts": "5.0.0",
-    "react-select": "^5.7.4",
+    "react-select": "^5.7.7",
     "web-vitals": "^3.4.0"
   },
   "scripts": {

@@ -8,7 +8,7 @@ import Kanban from "../pages/Kanban/Kanban";
 import HumanResource from "../pages/HumanResource/HumanResource";
 import Singin from '../shared/Singin/Singin'
 import ClientsInfo from "../pages/Clients/ClientsInfo/ClientsInfo";
-import Invoices from "../pages/Accounts/Invoices/Invoices";
+import Invoices from "../pages/Invoices/Invoices";
 import AddNewLead from "../pages/Marketing/Leads/AddNewLead";
 import AddCompany from "../pages/Dashboard/Marketing/AddCompany/AddCompany";
 import AddPosition from "../pages/Dashboard/Marketing/AddPosition/AddPosition";
@@ -19,7 +19,10 @@ import AllUser from "../pages/Dashboard/GenarelSettings/AllUser/AllUser";
 import { RequireAuth } from "react-auth-kit";
 import RoleBasedRoute from "./RoleBasedRoute";
 import Unauthorized from "../shared/Unauthorized/Unauthorized";
-import ResumeAdd from "../pages/HumanResource/ResumeAdd/Resume";
+import ResumeAdd from "../pages/HumanResource/RecruitmentManegment/ResumeAdd/Resume";
+import InterviewEvaluation from "../pages/HumanResource/RecruitmentManegment/InterviewEvaluation/InterviewEvaluation";
+import EmployConfirmation from "../pages/HumanResource/RecruitmentManegment/EmployConfirmation/EmployConfirmation";
+import LeadDetails from "../pages/Marketing/Leads/LeadDetails";
 
 
 const router = createBrowserRouter([
@@ -78,9 +81,29 @@ const router = createBrowserRouter([
                     />
                 ),
             },
+            {
+                path: '/human-resource/recruitment/interview-evaluation',
+                element: (
+                    <RoleBasedRoute
+                        path="/human-resource/recruitment/interview-evaluation"
+                        element={<InterviewEvaluation />}
+                        requiredRoles={['hr', 'admin']}
+                    />
+                ),
+            },
+            {
+                path: '/human-resource/recruitment/employ-confirmation',
+                element: (
+                    <RoleBasedRoute
+                        path="/human-resource/recruitment/employ-confirmation"
+                        element={<EmployConfirmation />}
+                        requiredRoles={['hr', 'admin']}
+                    />
+                ),
+            },
 
             {
-                path: '/accounts-invoice',
+                path: '/invoice',
                 element: <Invoices></Invoices>
             },
 
@@ -91,6 +114,16 @@ const router = createBrowserRouter([
                     <RoleBasedRoute
                         path="/marketing-leads"
                         element={<Leads />}
+                        requiredRoles={['admin', 'marketing']}
+                    />
+                ),
+            },
+            {
+                path: '/marketing-leads/:id',
+                element: (
+                    <RoleBasedRoute
+                        path="/marketing-leads/:id"
+                        element={<LeadDetails />}
                         requiredRoles={['admin', 'marketing']}
                     />
                 ),

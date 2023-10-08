@@ -264,7 +264,6 @@ console.log(companyOptions)
                                 rules={{
                                     required: 'WhatsApp Number is required',
                                     pattern: {
-                                        value: /^\+[0-9]+$/,
                                         message:
                                             'Invalid WhatsApp Number format. It should start with a plus sign and contain only digits.',
                                     },

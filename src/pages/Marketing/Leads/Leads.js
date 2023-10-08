@@ -51,6 +51,8 @@ const Leads = () => {
 
   const { data: leadsData, isLoading, isError } = useQuery('leads', fetchLeads);
 
+
+
   // Calculate totalItems based on leadsData
   const totalItems = leadsData ? leadsData.length : 0;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -100,7 +102,7 @@ const Leads = () => {
         isOpen={isModalOpen}
         onRequestClose={closeModal}
         contentLabel="Add New Lead Modal"
-        style={modalStyles} 
+        style={modalStyles}
       >
         <button style={{ color: currentColor }} className='mt-10 btn' onClick={closeModal}>
           <AiFillCloseCircle className='w-8 h-8' />

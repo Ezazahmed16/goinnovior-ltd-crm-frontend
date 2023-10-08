@@ -146,7 +146,7 @@ const Sidebar = () => {
                                                     <ul>
                                                         <li>
                                                             <Link>
-                                                                Recruitment Poster
+                                                                Job Posting
                                                             </Link>
                                                         </li>
                                                         <li>
@@ -155,13 +155,13 @@ const Sidebar = () => {
                                                             </Link>
                                                         </li>
                                                         <li>
-                                                            <Link>
-                                                                Interview manegment
+                                                            <Link to='/human-resource/recruitment/interview-evaluation'>
+                                                                Interview Evaluation
                                                             </Link>
                                                         </li>
                                                         <li>
-                                                            <Link>
-                                                                Position manegment
+                                                            <Link to='/human-resource/recruitment/employ-confirmation'>
+                                                                Employ Confirmation
                                                             </Link>
                                                         </li>
                                                     </ul>
@@ -194,24 +194,38 @@ const Sidebar = () => {
                                     </details>
                                 </li>
 
+                                {/* Invoice ============== */}
+                                <li className='mb-1'>
+                                    <NavLink
+                                        className='py-2'
+                                        onClick={handleCloseSideBar}
+                                        style={({ isActive }) => ({
+                                            backgroundColor: isActive ? currentColor : ''
+                                        })} to='/invoice'>
+                                        <FaFileInvoiceDollar className='w-6 h-6' />
+                                        Invoice
+                                    </NavLink>
+                                </li>
+
+                                {/* Accounts ======================  */}
                                 <li className='mb-1'>
                                     <details close>
                                         <summary >
                                             <MdManageAccounts className='w-6 h-6' />
                                             Accounts</summary>
                                         <ul>
-                                            <li>
+                                            {/* <li>
                                                 <NavLink
                                                     className='py-2'
                                                     onClick={handleCloseSideBar}
                                                     style={({ isActive }) => ({
                                                         backgroundColor: isActive ? currentColor : ''
-                                                    })} to='/accounts-invoice'
+                                                    })} to='/invoice'
                                                 >
                                                     <FaFileInvoiceDollar className='w-6 h-6' />
                                                     Invoices
                                                 </NavLink>
-                                            </li>
+                                            </li> */}
                                         </ul>
                                     </details>
                                 </li>

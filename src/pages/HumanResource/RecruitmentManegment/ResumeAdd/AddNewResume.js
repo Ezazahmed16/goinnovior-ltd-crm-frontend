@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { GrAdd } from 'react-icons/gr';
 import toast from 'react-hot-toast';
 import { useForm, Controller } from 'react-hook-form';
-import { useStateContext } from '../../../contexts/ContextProvider';
+import { useStateContext } from '../../../../contexts/ContextProvider';
 import { useMutation, useQueryClient } from 'react-query';
 import axios from 'axios';
 
@@ -25,14 +25,10 @@ const AddNewResume = () => {
         try {
             const currentDate = new Date().toLocaleDateString();
             data.currentDate = currentDate;
-
             // Add Status 
             const Status = 'processOne'
             data.currentStatus = Status;
-
-
             console.log(data)
-
             // Use the mutation function to add the resume
             await addResumeMutation.mutateAsync(data);
             toast.success('Resume added successfully');

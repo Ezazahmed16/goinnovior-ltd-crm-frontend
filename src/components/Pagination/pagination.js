@@ -21,7 +21,9 @@ const Pagination = ({ currentPage, totalPages, onPageChange, maxVisiblePages = 8
             }
 
             for (let i = firstPage; i <= lastPage; i++) {
-                pageButtons.push(i);
+                if (i > 0) { // Check if i is greater than 0
+                    pageButtons.push(i);
+                }
             }
 
             if (lastPage < totalPages - 1) {

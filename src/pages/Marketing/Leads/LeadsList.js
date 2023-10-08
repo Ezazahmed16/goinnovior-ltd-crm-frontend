@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
 import { GrView } from 'react-icons/gr';
 import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
-import { useMutation, useQueryClient } from 'react-query'; // Import useMutation and useQueryClient
+import { useMutation, useQueryClient } from 'react-query';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { Link } from 'react-router-dom';
 
 const LeadsList = ({ leadsData, itemsPerPage, currentPage }) => {
-    const queryClient = useQueryClient(); // Initialize the query client
+    const queryClient = useQueryClient();
 
+    const sortedLeadsData = leadsData?.sort((a, b) => {
+        return new Date(b.leadEntryDate) - new Date(a.leadEntryDate);
+    });
 
     const deleteLeadMutation = useMutation(
         async (leadId) => {
@@ -15,7 +19,7 @@ const LeadsList = ({ leadsData, itemsPerPage, currentPage }) => {
         },
         {
             onMutate: (leadId) => {
-                const snapshot = queryClient.getQueryData('leads'); // Get data using the query client
+                const snapshot = queryClient.getQueryData('leads');
                 queryClient.setQueryData('leads', (prevData) => {
                     return prevData.filter((lead) => lead.id !== leadId);
                 });
@@ -23,16 +27,14 @@ const LeadsList = ({ leadsData, itemsPerPage, currentPage }) => {
             },
             onSuccess: () => {
                 toast.success('Successfully Deleted');
-                queryClient.invalidateQueries('leads'); // Refetch 'leads' query after successful deletion
-                // setLoadingButtonId(null); // Reset the button in loading state
-
+                queryClient.invalidateQueries('leads');
             },
         }
     );
 
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const currentData = leadsData?.slice(startIndex, endIndex);
+    const currentData = sortedLeadsData?.slice(startIndex, endIndex);
 
     const handleDelete = (leadId) => {
         deleteLeadMutation.mutate(leadId);
@@ -45,7 +47,6 @@ const LeadsList = ({ leadsData, itemsPerPage, currentPage }) => {
                     {/* head */}
                     <thead>
                         <tr>
-                            <th></th>
                             <th>Name</th>
                             <th>Org. Name</th>
                             <th>Org. Contact Info</th>
@@ -54,12 +55,7 @@ const LeadsList = ({ leadsData, itemsPerPage, currentPage }) => {
                     </thead>
                     <tbody>
                         {currentData.map((lead) => (
-                            <tr key={lead.id}>
-                                <th>
-                                    <label>
-                                        <input type="checkbox" className="checkbox" />
-                                    </label>
-                                </th>
+                            <tr key={lead._id}>
                                 <td>
                                     <div className="flex items-center space-x-3">
                                         <div>
@@ -80,9 +76,11 @@ const LeadsList = ({ leadsData, itemsPerPage, currentPage }) => {
                                 </td>
                                 <th>
                                     <div className="tooltip tooltip-bottom" data-tip="View">
-                                        <button>
-                                            <GrView className="w-5 h-5" />
-                                        </button>
+                                        <Link to={`/marketing-leads/${lead._id}`}>
+                                            <button>
+                                                <GrView className="w-5 h-5" />
+                                            </button>
+                                        </Link>
                                     </div>
 
                                     <div className="tooltip tooltip-bottom mx-1" data-tip="Edit">
@@ -92,11 +90,17 @@ const LeadsList = ({ leadsData, itemsPerPage, currentPage }) => {
                                     </div>
 
                                     <div className="tooltip tooltip-bottom" data-tip="Delete">
-                                        <button onClick={() => handleDelete(lead._id)} disabled={deleteLeadMutation.isLoading}>
-                                            {deleteLeadMutation.isLoading ? 'Deleting...' : <AiFillDelete className="w-5 h-5" />}
+                                        <button
+                                            onClick={() => handleDelete(lead._id)}
+                                            disabled={deleteLeadMutation.isLoading}
+                                        >
+                                            {deleteLeadMutation.isLoading ? (
+                                                <span className="loading loading-small"></span>
+                                            ) : (
+                                                <AiFillDelete className="w-5 h-5" />
+                                            )}
                                         </button>
                                     </div>
-
                                 </th>
                             </tr>
                         ))}
@@ -104,7 +108,6 @@ const LeadsList = ({ leadsData, itemsPerPage, currentPage }) => {
                     {/* foot */}
                     <tfoot>
                         <tr>
-                            <th></th>
                             <th>Name</th>
                             <th>Org. Name</th>
                             <th>Org. Contact Info</th>

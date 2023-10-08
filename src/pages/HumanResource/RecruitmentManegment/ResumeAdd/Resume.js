@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import Header from '../../../shared/Header/Header';
+import Header from '../../../../shared/Header/Header';
 import ResumeList from './ResumeList';
-import Pagination from '../../../components/Pagination/pagination';
-import AddNewLead from '../../Marketing/Leads/AddNewLead';
-import { useStateContext } from '../../../contexts/ContextProvider';
+import Pagination from '../../../../components/Pagination/pagination';
+import { useStateContext } from '../../../../contexts/ContextProvider';
 import Modal from 'react-modal';
 import { GrAdd } from 'react-icons/gr';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import AddNewResume from './AddNewResume';
 import axios from 'axios';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery } from 'react-query';
 
 const modalStyles = {
     content: {
@@ -27,10 +26,14 @@ const ResumeAdd = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
-    const queryClient = useQueryClient(); // Initialize query client
 
-    const openModal = () => setIsModalOpen(true);
-    const closeModal = () => setIsModalOpen(false);
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
 
     const fetchEmployData = async () => {
         try {
@@ -41,15 +44,21 @@ const ResumeAdd = () => {
         }
     };
 
-    const { data: employData, isLoading, isError } = useQuery('employData', fetchEmployData, {
-        staleTime: 30000, // Set a time (in milliseconds) for how long the data should be considered fresh
-        refetchOnWindowFocus: true, // Enable automatic refetch when the window gains focus
-    });
+    const { data: employData, isLoading, isError } = useQuery('employData', fetchEmployData);
 
-    const totalItems = employData ? employData.length : 0;
+    const totalItems = employData?.employ ? employData.employ.length : 0;
     const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-    const handlePageChange = (page) => setCurrentPage(page);
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
+
+    // Calculate the start and end indices for the current page
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+
+    // Get the data to display on the current page
+    const currentData = employData?.employ.slice(startIndex, endIndex);
 
     return (
         <div className='m-2 md:m-10 mt-24 p-2 md:p-2 bg-main-bg rounded-3xl'>
@@ -74,7 +83,8 @@ const ResumeAdd = () => {
             ) : isError ? (
                 <p>Error fetching resumes</p>
             ) : (
-                <ResumeList employData={employData} itemsPerPage={itemsPerPage} currentPage={currentPage} />
+                <ResumeList employData={currentData} itemsPerPage={itemsPerPage} currentPage={currentPage} />
+
             )}
 
             <Pagination
@@ -82,6 +92,7 @@ const ResumeAdd = () => {
                 totalPages={totalPages}
                 onPageChange={handlePageChange}
             />
+
 
             <Modal
                 isOpen={isModalOpen}
@@ -94,6 +105,7 @@ const ResumeAdd = () => {
                 </button>
                 <AddNewResume />
             </Modal>
+            
         </div>
     );
 };
