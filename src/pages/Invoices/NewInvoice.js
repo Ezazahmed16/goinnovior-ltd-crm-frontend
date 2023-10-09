@@ -5,6 +5,7 @@ import Select from 'react-select';
 import toast from 'react-hot-toast';
 const NewInvoice = () => {
   const { currentColor } = useStateContext();
+  const [submitClicked, setSubmitClicked] = useState(false);
 
   const termsOptions = [
     { value: 'term1', label: 'Term 1' },
@@ -137,39 +138,39 @@ const NewInvoice = () => {
     }
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Extract the values from the selected terms and conditions options
-    const selectedTerms = invoiceData.termsAndConditions.map((option) => option.value);
+    // Check if the "Submit" button was clicked
+    if (submitClicked) {
+      // Extract the values from the selected terms and conditions options
+      const selectedTerms = invoiceData.termsAndConditions.map((option) => option.value);
+      const updatedInvoiceData = {
+        ...invoiceData,
+        termsAndConditions: selectedTerms,
+      };
 
-    // Create a new object with the extracted terms
-    const updatedInvoiceData = {
-      ...invoiceData,
-      termsAndConditions: selectedTerms,
-    };
+      try {
+        const response = await fetch('http://localhost:5000/api/invoices', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(updatedInvoiceData),
+        });
 
-    try {
-      const response = await fetch('http://localhost:5000/api/invoices', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedInvoiceData), // Send the updated data
-      });
-
-      if (response.ok) {
-        toast.success('Successfully Created')
-        console.log('Invoice submitted successfully');
-      } else {
-        console.error('Error submitting invoice');
+        if (response.ok) {
+          toast.success('Successfully Created');
+          console.log('Invoice submitted successfully');
+        } else {
+          console.error('Error submitting invoice');
+        }
+      } catch (error) {
+        console.error('Error:', error);
       }
-    } catch (error) {
-      console.error('Error:', error);
-    }
 
-    console.log('Submitted Invoice Data:', updatedInvoiceData); // Log the updated data
+      console.log('Submitted Invoice Data:', updatedInvoiceData);
+    }
   };
 
 
@@ -200,16 +201,13 @@ const NewInvoice = () => {
         </div>
 
         <div className="divider"></div>
-
-        {/* Add other form fields here */}
-        {/* For Company Name, Payment Term, PO Reference, Due Within, Billing Period */}
         <div className="my-5">
           <div className="">
             <label className="label">
               <span className="label-text">Company Name:</span>
             </label>
             <Select
-              className="select select-bordered w-full max-w-xs"
+              className=" select-bordered w-full max-w-xs"
               options={companyOptions}
               onChange={(selectedOption) => handleSelectChange('companyName', selectedOption)}
               value={{ label: invoiceData.companyName, value: invoiceData.companyName }}
@@ -225,7 +223,7 @@ const NewInvoice = () => {
               <span className="label-text">Payment Term:</span>
             </label>
             <Select
-              className="select select-bordered w-full"
+              className=" select-bordered w-full"
               options={paymentTermOptions} // Replace 'paymentTermOptions' with your actual payment term options
               onChange={(selectedOption) => handleSelectChange('paymentTerm', selectedOption)}
               value={{ label: invoiceData.paymentTerm, value: invoiceData.paymentTerm }}
@@ -237,8 +235,8 @@ const NewInvoice = () => {
               <span className="label-text">PO Reference:</span>
             </label>
             <Select
-              className="select select-bordered w-full"
-              options={poReferenceOptions} // Replace 'poReferenceOptions' with your actual PO reference options
+              className=" select-bordered w-full"
+              options={poReferenceOptions}
               onChange={(selectedOption) => handleSelectChange('poReference', selectedOption)}
               value={{ label: invoiceData.poReference, value: invoiceData.poReference }}
             />
@@ -344,7 +342,7 @@ const NewInvoice = () => {
             </div>
           ))}
           <div className='my-5'>
-            <button type="button my-5" className='btn text-white' style={{ backgroundColor: currentColor }} onClick={handleAddItem}>
+            <button type='button' className='btn text-white' style={{ backgroundColor: currentColor }} onClick={handleAddItem}>
               Add Item
             </button>
           </div>
@@ -352,7 +350,9 @@ const NewInvoice = () => {
 
         <div>
           <label>Terms and Conditions:</label>
+
           <Select
+            className='p-2'
             isMulti
             options={termsOptions}
             value={invoiceData.termsAndConditions}
@@ -366,7 +366,15 @@ const NewInvoice = () => {
         </div>
 
         <div>
-          <button className='btn my-5' style={{ backgroundColor: currentColor }} type="submit">Submit</button>
+          <button
+            type='submit'
+            name='submit'
+            className='btn text-white ml-2'
+            style={{ backgroundColor: currentColor }}
+            onClick={() => setSubmitClicked(true)} // Set submitClicked to true when "Submit" is clicked
+          >
+            Submit
+          </button>
         </div>
       </form>
     </div>

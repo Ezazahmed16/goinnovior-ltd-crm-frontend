@@ -32,7 +32,7 @@ const Invoices = () => {
     };
 
     return (
-        <div className='m-2 md:m-10 mt-24 p-2 md:p-2 bg-main-bg rounded-3xl'>
+        <div className='m-2 md:m-10 p-2 md:p-2 bg-main-bg rounded-3xl'>
 
 
             <div className="flex justify-between items-center gap-5">
