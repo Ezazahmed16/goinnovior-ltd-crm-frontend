@@ -23,7 +23,7 @@ const modalStyles = {
   },
 };
 
-Modal.setAppElement('#root'); // Set the root element for the modal
+Modal.setAppElement('#root'); 
 
 const Leads = () => {
   const { currentColor } = useStateContext();
