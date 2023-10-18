@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import logo from '../../assets/logo.png';
-import { Link, useNavigate } from 'react-router-dom'; // Import useHistory for redirection
+import { Link, useNavigate } from 'react-router-dom'; 
 import axios from 'axios';
 import { useSignIn } from 'react-auth-kit';
 import toast from 'react-hot-toast';
@@ -54,16 +54,15 @@ const SignIn = () => {
     }
   };
 
-
   return (
     <>
       <div>
         <div className="hero min-h-screen bg-base-200">
           <div className="hero-content flex-col lg:flex-row-reverse w-full">
             <div className="text-center lg:text-left">
-              <h1 className="text-4xl font-bold mb-4 mx-5">Sign in now</h1>
+              <h1 className="text-4xl font-bold mx-5">Sign in now</h1>
               <Link to='/'>
-                <img className='w-32 h-32 mt-8 m-auto' src={logo} alt="logo" />
+                <img className='w-52 mt-8 m-auto' src={logo} alt="logo" />
               </Link>
             </div>
 

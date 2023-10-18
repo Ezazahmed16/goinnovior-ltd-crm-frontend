@@ -31,7 +31,7 @@ const Sidebar = () => {
                     <>
                         <div className="flex justify-between items-center">
                             {/* Logo */}
-                            <Link to="/" onClick={handleCloseSideBar} className="items-center mt-4 flex w-24 h-26 ml-4">
+                            <Link to="/" onClick={handleCloseSideBar} className="items-center mt-4 flex w-40 ">
                                 <img className='' src={logo} alt="logo" />
                             </Link>
 

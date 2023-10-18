@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 
 const LeadsList = ({ leadsData, itemsPerPage, currentPage }) => {
     const queryClient = useQueryClient();
+    const [loadingStates, setLoadingStates] = useState({});
 
     const sortedLeadsData = leadsData?.sort((a, b) => {
         return new Date(b.leadEntryDate) - new Date(a.leadEntryDate);
@@ -23,11 +24,22 @@ const LeadsList = ({ leadsData, itemsPerPage, currentPage }) => {
                 queryClient.setQueryData('leads', (prevData) => {
                     return prevData.filter((lead) => lead.id !== leadId);
                 });
+                setLoadingStates((prevStates) => ({
+                    ...prevStates,
+                    [leadId]: true,
+                }));
                 return { snapshot };
             },
             onSuccess: () => {
                 toast.success('Successfully Deleted');
                 queryClient.invalidateQueries('leads');
+            },
+            onError: (error) => {
+                const leadId = error.config.data; 
+                setLoadingStates((prevStates) => ({
+                    ...prevStates,
+                    [leadId]: false,
+                }));
             },
         }
     );
@@ -37,25 +49,28 @@ const LeadsList = ({ leadsData, itemsPerPage, currentPage }) => {
     const currentData = sortedLeadsData?.slice(startIndex, endIndex);
 
     const handleDelete = (leadId) => {
-        deleteLeadMutation.mutate(leadId);
+        if (!loadingStates[leadId]) {
+            deleteLeadMutation.mutate(leadId);
+        }
     };
 
     return (
         <div>
             <div className="overflow-x-auto bg-base-200 p-5 rounded-xl">
-                <table className="table">
+                <table className="table table-xs">
                     {/* head */}
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Org. Name</th>
-                            <th>Org. Contact Info</th>
+                            <th>Organization</th>
+                            <th>Number</th>
+                            <th>Whatsapp</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         {currentData.map((lead) => (
-                            <tr key={lead._id}>
+                            <tr key={lead?._id}>
                                 <td>
                                     <div className="flex items-center space-x-3">
                                         <div>
@@ -64,16 +79,17 @@ const LeadsList = ({ leadsData, itemsPerPage, currentPage }) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td>{lead.companyName}</td>
+                                <td>{lead?.companyName}</td>
                                 <td>
                                     <span className="badge badge-ghost badge-sm">
-                                        {lead.phoneNumbers}
+                                        {lead?.phoneNumbers.primary}
                                     </span>
                                     <br />
-                                    <a className='hover:underline' href={`mailto:${lead.email}`}>
-                                        {lead.email}
-                                    </a>
+                                    <span>
+                                        {lead?.phoneNumbers.additional}
+                                    </span>
                                 </td>
+                                <td>{lead?.email}</td>
                                 <th>
                                     <div className="tooltip tooltip-bottom" data-tip="View">
                                         <Link to={`/marketing-leads/${lead._id}`}>
@@ -92,9 +108,9 @@ const LeadsList = ({ leadsData, itemsPerPage, currentPage }) => {
                                     <div className="tooltip tooltip-bottom" data-tip="Delete">
                                         <button
                                             onClick={() => handleDelete(lead._id)}
-                                            disabled={deleteLeadMutation.isLoading}
+                                            disabled={loadingStates[lead._id]}
                                         >
-                                            {deleteLeadMutation.isLoading ? (
+                                            {loadingStates[lead._id] ? (
                                                 <span className="loading loading-small"></span>
                                             ) : (
                                                 <AiFillDelete className="w-5 h-5" />

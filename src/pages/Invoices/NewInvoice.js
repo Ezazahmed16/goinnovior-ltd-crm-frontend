@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useStateContext } from '../../contexts/ContextProvider';
 import { GrTrash } from 'react-icons/gr';
 import Select from 'react-select';
@@ -6,6 +6,9 @@ import toast from 'react-hot-toast';
 const NewInvoice = () => {
   const { currentColor } = useStateContext();
   const [submitClicked, setSubmitClicked] = useState(false);
+  const [companyOptions, setCompanyOptions] = useState([]);
+
+  console.log(companyOptions)
 
   const termsOptions = [
     { value: 'term1', label: 'Term 1' },
@@ -13,25 +16,63 @@ const NewInvoice = () => {
     { value: 'term3', label: 'Term 3' },
   ];
 
-  const companyOptions = [
-    { value: 'company1', label: 'Company 1' },
-    { value: 'company2', label: 'Company 2' },
-    // Add more options as needed
+  const brandOptions = [
+    { value: 'brand1', label: 'Brand 1' },
+    { value: 'brand2', label: 'Brand 2' },
+    // Add more brand options as needed
   ];
+
+  const warrantyOptions = [
+    { value: 'warranty1', label: 'Warranty 1' },
+    { value: 'warranty2', label: 'Warranty 2' },
+    // Add more warranty options as needed
+  ];
+
+  const originOptions = [
+    { value: 'origin1', label: 'Origin 1' },
+    { value: 'origin2', label: 'Origin 2' },
+    // Add more origin options as needed
+  ];
+
+  // Fetch company data when the component mounts
+  useEffect(() => {
+    fetchCompanyData();
+  }, []);
+
+  const fetchCompanyData = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/companies');
+
+      if (response.ok) {
+        const data = await response.json();
+
+        const options = data.map((company) => ({
+          value: company.companyName,
+          label: company.companyName,
+        }));
+
+        setCompanyOptions(options);
+      } else {
+        console.error('Error fetching company data');
+      }
+    } catch (error) {
+      console.error('Error fetching company data:', error);
+    }
+  };
 
   const paymentTermOptions = [
-    { value: 'term1', label: 'Term 1' },
-    { value: 'term2', label: 'Term 2' },
-    // Add more options as needed
+    { value: 'cash', label: 'Cash' },
+    { value: 'check', label: 'Check' },
   ];
 
-  const poReferenceOptions = [
-    { value: 'ref1', label: 'Reference 1' },
-    { value: 'ref2', label: 'Reference 2' },
-    // Add more options as needed
+  const vatOptions = [
+    { value: '5', label: '5%' },
+    { value: '7', label: '7%' },
+    { value: '10', label: '10%' },
+    { value: '15', label: '15%' },
+    { value: '20', label: '20%' },
   ];
 
-  // State variables
   const [invoiceData, setInvoiceData] = useState({
     invoiceNumber: '',
     date: '',
@@ -39,10 +80,13 @@ const NewInvoice = () => {
     paymentTerm: '',
     poReference: '',
     dueWithin: '',
-    billingPeriod: [{
+    vat: '',
+    status: '',
+    discount: '',
+    billingPeriod: {
       startDate: '',
       endDate: '',
-    }],
+    },
     items: [
       {
         itemName: '',
@@ -53,6 +97,7 @@ const NewInvoice = () => {
     ],
     termsAndConditions: [],
   });
+
 
   const generateInvoiceNumber = () => {
     const randomNumber = Math.floor(Math.random() * 9000) + 1000;
@@ -88,11 +133,14 @@ const NewInvoice = () => {
     }
   };
 
-
   // Handle item changes
   const handleItemChange = (index, field, value) => {
     const updatedItems = [...invoiceData.items];
-    updatedItems[index][field] = value;
+    if (field === 'itemName' || field === 'description' || field === 'quantity' || field === 'unitPrice') {
+      updatedItems[index][field] = value;
+    } else {
+      updatedItems[index][field] = value.value; // Handle Select fields
+    }
     setInvoiceData((prevData) => ({
       ...prevData,
       items: updatedItems,
@@ -118,9 +166,6 @@ const NewInvoice = () => {
   };
 
 
-
-  // Handle Company Name, Payment Term, and PO Reference changes
-  // Handle form input changes
   const handleSelectChange = (field, selectedOption) => {
     if (field === 'termsAndConditions') {
       // If it's the termsAndConditions field, update it as an array of strings
@@ -137,6 +182,7 @@ const NewInvoice = () => {
       }));
     }
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -184,7 +230,7 @@ const NewInvoice = () => {
             <label className="label">
               <span className="label-text">Invoice Number:</span>
             </label>
-            <input className='input input-bordered w-full' type="text" value={invoiceData.invoiceNumber} readOnly />
+            <input className='input input-bordered w-full' type="text" value={invoiceData.invoiceNumber} readOnly required />
           </div>
 
           <div>
@@ -196,25 +242,72 @@ const NewInvoice = () => {
               value={invoiceData.date}
               className='input input-bordered w-full'
               onChange={(e) => handleInputChange('date', e.target.value)}
+              required
             />
           </div>
         </div>
 
         <div className="divider"></div>
-        <div className="my-5">
+        <div className="grid grid-cols-4 gap-5">
           <div className="">
             <label className="label">
               <span className="label-text">Company Name:</span>
             </label>
             <Select
-              className=" select-bordered w-full max-w-xs"
+              className="select-bordered w-full"
               options={companyOptions}
               onChange={(selectedOption) => handleSelectChange('companyName', selectedOption)}
               value={{ label: invoiceData.companyName, value: invoiceData.companyName }}
+              required
             />
           </div>
-        </div>
 
+          <div>
+            <label className="label">
+              <span className="label-text">VAT:</span>
+            </label>
+            <Select
+              className="select-bordered w-full"
+              options={vatOptions}
+              onChange={(selectedOption) => handleSelectChange('vat', selectedOption)}
+              value={{ label: invoiceData.vat, value: invoiceData.vat }}
+              required
+            />
+          </div>
+
+
+          <div>
+            <label className="label">
+              <span className="label-text">Status:</span>
+            </label>
+            <Select
+              className="select-bordered w-full"
+              options={[
+                { value: 'paid', label: 'Paid' },
+                { value: 'pending', label: 'Pending' },
+              ]}
+              onChange={(selectedOption) => handleSelectChange('status', selectedOption)}
+              value={{ label: invoiceData.status, value: invoiceData.status }}
+              required
+            />
+          </div>
+
+          <div>
+            <label className="label">
+              <span className="label-text">Discount:</span>
+            </label>
+            <input
+              type="number"
+              placeholder="Discount"
+              value={invoiceData.discount}
+              onChange={(e) => handleInputChange('discount', e.target.value)}
+              className="input input-bordered w-full"
+              required
+            />
+          </div>
+
+
+        </div>
         <div className="divider"></div>
 
         <div className=" grid grid-cols-5 gap-5 ">
@@ -227,20 +320,23 @@ const NewInvoice = () => {
               options={paymentTermOptions} // Replace 'paymentTermOptions' with your actual payment term options
               onChange={(selectedOption) => handleSelectChange('paymentTerm', selectedOption)}
               value={{ label: invoiceData.paymentTerm, value: invoiceData.paymentTerm }}
+              required
             />
           </div>
 
-          <div className="">
+          <div>
             <label className="label">
               <span className="label-text">PO Reference:</span>
             </label>
-            <Select
-              className=" select-bordered w-full"
-              options={poReferenceOptions}
-              onChange={(selectedOption) => handleSelectChange('poReference', selectedOption)}
-              value={{ label: invoiceData.poReference, value: invoiceData.poReference }}
+            <input
+              type="text"
+              value={invoiceData.poReference}
+              className="input input-bordered w-full"
+              onChange={(e) => handleInputChange('poReference', e.target.value)}
+              required
             />
           </div>
+
 
           <div>
             <label className="label">
@@ -251,41 +347,61 @@ const NewInvoice = () => {
               value={invoiceData.dueWithin}
               className='input input-bordered w-full'
               onChange={(e) => handleInputChange('dueWithin', e.target.value)}
+              required
             />
           </div>
 
-          <div>
-            <label className="label">
-              <span className="label-text">Billing Period Start Date:</span>
-            </label>
-            <input
-              type="date"
-              value={invoiceData.billingPeriod.startDate}
-              className='input input-bordered w-full'
-              onChange={(e) => handleInputChange('billingPeriod.startDate', e.target.value)}
-            />
-          </div>
-          <div>
-            <label className="label">
-              <span className="label-text">Billing Period End Date:</span>
-            </label>
-            <input
-              type="date"
-              value={invoiceData.billingPeriod.endDate}
-              className='input input-bordered w-full'
-              onChange={(e) => handleInputChange('billingPeriod.endDate', e.target.value)}
-            />
-          </div>
+          {invoiceData.status === 'pending' && (
+            <>
+              <div>
+                <label className="label">
+                  <span className="label-text">Billing Period Start Date:</span>
+                </label>
+                <input
+                  type="date"
+                  value={invoiceData.billingPeriod.startDate}
+                  className="input input-bordered w-full"
+                  onChange={(e) => handleInputChange('billingPeriod.startDate', e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <label className="label">
+                  <span className="label-text">Billing Period End Date:</span>
+                </label>
+                <input
+                  type="date"
+                  value={invoiceData.billingPeriod.endDate}
+                  className="input input-bordered w-full"
+                  onChange={(e) => handleInputChange('billingPeriod.endDate', e.target.value)}
+                  required
+                />
+              </div>
+            </>
+          )}
 
         </div>
 
 
         {/* For Items */}
-        <div>
+        <div className=''>
           <div className="divider"></div>
 
           {invoiceData.items.map((item, index) => (
-            <div key={index} className='grid grid-cols-5 gap-5 items-center justify-center'>
+            <div key={index} className='grid grid-cols-7 gap-5 items-center justify-center'>
+              <div className="">
+                <label className="label mt-5">
+                  <span className="label-text">SL No</span>
+                </label>
+                <input
+                  type="number"
+                  placeholder="SL No"
+                  value={item.slNo}
+                  onChange={(e) => handleItemChange(index, 'slNo', e.target.value)}
+                  className='input input-bordered w-full'
+                  required
+                />
+              </div>
               <div className="">
                 <label className="label mt-5">
                   <span className="label-text">Item Name</span>
@@ -296,6 +412,7 @@ const NewInvoice = () => {
                   value={item.itemName}
                   onChange={(e) => handleItemChange(index, 'itemName', e.target.value)}
                   className='input input-bordered w-full'
+                  required
                 />
               </div>
               <div className="">
@@ -308,6 +425,69 @@ const NewInvoice = () => {
                   value={item.description}
                   onChange={(e) => handleItemChange(index, 'description', e.target.value)}
                   className='input input-bordered w-full'
+                  required
+                />
+              </div>
+              <div className="">
+                <label className="label mt-5">
+                  <span className="label-text">Brand</span>
+                </label>
+                <Select
+                  className="select-bordered w-full"
+                  options={brandOptions} // Replace 'brandOptions' with your actual brand options
+                  onChange={(selectedOption) => handleItemChange(index, 'brand', selectedOption)}
+                  value={{ label: item.brand, value: item.brand }}
+                  required
+                />
+              </div>
+              <div className="">
+                <label className="label mt-5">
+                  <span className="label-text">Model</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="Model"
+                  value={item.model}
+                  onChange={(e) => handleItemChange(index, 'model', e.target.value)}
+                  className='input input-bordered w-full'
+                  required
+                />
+              </div>
+              <div className="">
+                <label className="label mt-5">
+                  <span className="label-text">Specification</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="Specification"
+                  value={item.specification}
+                  onChange={(e) => handleItemChange(index, 'specification', e.target.value)}
+                  className='input input-bordered w-full'
+                  required
+                />
+              </div>
+              <div className="">
+                <label className="label mt-5">
+                  <span className="label-text">Warranty</span>
+                </label>
+                <Select
+                  className="select-bordered w-full"
+                  options={warrantyOptions} // Replace 'warrantyOptions' with your actual warranty options
+                  onChange={(selectedOption) => handleItemChange(index, 'warranty', selectedOption)}
+                  value={{ label: item.warranty, value: item.warranty }}
+                  required
+                />
+              </div>
+              <div className="">
+                <label className="label mt-5">
+                  <span className="label-text">Origin</span>
+                </label>
+                <Select
+                  className="select-bordered w-full"
+                  options={originOptions} // Replace 'originOptions' with your actual origin options
+                  onChange={(selectedOption) => handleItemChange(index, 'origin', selectedOption)}
+                  value={{ label: item.origin, value: item.origin }}
+                  required
                 />
               </div>
               <div className="">
@@ -320,6 +500,7 @@ const NewInvoice = () => {
                   value={item.quantity}
                   onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
                   className='input input-bordered w-full'
+                  required
                 />
               </div>
               <div className="">
@@ -332,6 +513,7 @@ const NewInvoice = () => {
                   value={item.unitPrice}
                   onChange={(e) => handleItemChange(index, 'unitPrice', e.target.value)}
                   className='input input-bordered w-full'
+                  required
                 />
               </div>
               {index > 0 && (
@@ -362,6 +544,7 @@ const NewInvoice = () => {
                 termsAndConditions: selectedOptions,
               }))
             }
+            required
           />
         </div>
 

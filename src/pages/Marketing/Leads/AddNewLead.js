@@ -5,9 +5,16 @@ import { useForm, Controller } from 'react-hook-form';
 import { useStateContext } from '../../../contexts/ContextProvider';
 import { useMutation, useQueryClient } from 'react-query';
 import axios from 'axios';
+import { FaMinus, FaPlus } from 'react-icons/fa';
+import { useAuthUser } from 'react-auth-kit';
 
 const AddNewLead = () => {
     const { currentColor } = useStateContext();
+    const auth = useAuthUser();
+    const [showAdditionalNumber, setShowAdditionalNumber] = useState(false);
+
+console.log(auth().name)
+
     const {
         handleSubmit,
         control,
@@ -26,14 +33,13 @@ const AddNewLead = () => {
     const [departmentOptions, setDepartmentOptions] = useState([]);
     const [positionOptions, setPositionOptions] = useState([]);
     const [companyTypeOptions, setCompanyTypeOptions] = useState([]);
-console.log(companyOptions)
 
     // Function to fetch company data
     const fetchCompanyData = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/companies'); // Replace with your API endpoint
+            const response = await axios.get('http://localhost:5000/api/companies');
             const options = response.data.map((company) => ({
-                value: company._id, // Changed "id" to "_id"
+                value: company._id,
                 label: company.companyName,
             }));
             setCompanyOptions(options);
@@ -43,25 +49,25 @@ console.log(companyOptions)
     };
 
     // Function to fetch company type data
-    const fetchCompanyTypeData = async () => { // Changed the function name
+    const fetchCompanyTypeData = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/companyType'); // Replace with your API endpoint
+            const response = await axios.get('http://localhost:5000/api/companyType');
             const options = response.data.map((company) => ({
-                value: company._id, // Changed "id" to "_id"
+                value: company._id,
                 label: company.name,
             }));
-            setCompanyTypeOptions(options); // Changed the state variable name
+            setCompanyTypeOptions(options);
         } catch (error) {
-            console.error('Error fetching company type data:', error); // Changed the log message
+            console.error('Error fetching company type data:', error);
         }
     };
 
     // Function to fetch department data
     const fetchDepartmentData = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/departments'); // Replace with your API endpoint
+            const response = await axios.get('http://localhost:5000/api/departments');
             const options = response.data.map((department) => ({
-                value: department._id, // Changed "id" to "_id"
+                value: department._id,
                 label: department.departmentName,
             }));
             setDepartmentOptions(options);
@@ -73,9 +79,9 @@ console.log(companyOptions)
     // Function to fetch position data
     const fetchPositionData = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/add-positions'); // Replace with your API endpoint
+            const response = await axios.get('http://localhost:5000/api/add-positions');
             const options = response.data.map((position) => ({
-                value: position._id, // Changed "id" to "_id"
+                value: position._id,
                 label: position.positionName,
             }));
             setPositionOptions(options);
@@ -84,25 +90,28 @@ console.log(companyOptions)
         }
     };
 
-
     // Fetch company, department, and position data when the component mounts
     useEffect(() => {
         fetchCompanyData();
-        fetchCompanyTypeData(); // Changed the function name
+        fetchCompanyTypeData();
         fetchDepartmentData();
         fetchPositionData();
-    }, []); 
+    }, []);
 
     const onAddLead = async (data) => {
         try {
             // Calculate the fullName by combining first and last names
             const fullName = `${data.firstname} ${data.lastname}`;
 
-            // Use the mutation function to add the lead with the calculated fullName
-            await addLeadMutation.mutateAsync({
+            // Merge user's authentication data into the form data
+            const formDataWithAuth = {
                 ...data,
-                fullname: fullName,
-            });
+                fullName, // Changed "fullname" to "fullName"
+                authData: auth().name,
+            };
+
+            await addLeadMutation.mutateAsync(formDataWithAuth);
+
             toast.success('Lead added successfully');
             // Refetch the leads data after adding a new lead
             queryClient.invalidateQueries('leads');
@@ -111,12 +120,13 @@ console.log(companyOptions)
         }
     };
 
+    const toggleAdditionalNumber = () => {
+        setShowAdditionalNumber(!showAdditionalNumber);
+    };
+
     const onSubmit = async (data) => {
         try {
-            // Include the generated fullName field in the data object
             await onAddLead(data);
-
-            // Clear the form after submission
             reset();
         } catch (error) {
             console.error('Error submitting form:', error);
@@ -124,81 +134,83 @@ console.log(companyOptions)
     };
 
     return (
-        <div className='m-2 md:m-10 md:mt-5 p-2 md:p-2 bg-main-bg rounded-3xl'>
-            <form onSubmit={handleSubmit(onSubmit)} className='w-full'>
+        <div className="m-2 md:m-10 md:mt-5 p-2 md:p-2 bg-main-bg rounded-3xl">
+            <form onSubmit={handleSubmit(onSubmit)} className="w-full">
                 <h3
                     style={{ backgroundColor: currentColor }}
-                    className='font-bold text-xl md:text-2xl md:my-2 text-center p-3 rounded-lg text-white '
+                    className="font-bold text-xl md:text-2xl md:my-2 text-center p-3 rounded-lg text-white"
                 >
                     Add a new lead
                 </h3>
-                <div className='divider'></div>
+                <div className="divider" />
 
                 {/* General Information */}
-                <div className='my-2'>
-                    <div className='md:grid md:grid-cols-2 lg:grid-cols-3 gap-5 w-full'>
+                <div className="my-2">
+                    <div className="md:grid md:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
                         {/* First Name */}
-                        <div className='w-full'>
-                            <div className='label'>
-                                <label htmlFor='firstname' className='label-text'>
+                        <div className="w-full">
+                            <div className="label">
+                                <label htmlFor="firstname" className="label-text">
                                     First Name:
                                 </label>
                             </div>
                             <Controller
-                                name='firstname'
+                                name="firstname"
                                 control={control}
-                                defaultValue=''
+                                defaultValue=""
                                 rules={{ required: 'First Name is required' }}
                                 render={({ field }) => (
                                     <input
-                                        id='firstname'
-                                        placeholder='Enter Your First Name'
-                                        className={`input input-bordered input-success w-full ${errors.firstname ? 'input-error' : ''
-                                            }`}
-                                        type='text'
+                                        id="firstname"
+                                        placeholder="Enter Your First Name"
+                                        className={`input input-bordered input-success w-full ${
+                                            errors.firstname ? 'input-error' : ''
+                                        }`}
+                                        type="text"
                                         {...field}
                                     />
                                 )}
                             />
                             {errors.firstname && (
-                                <p className='text-error'>{errors.firstname.message}</p>
+                                <p className="text-error">{errors.firstname.message}</p>
                             )}
                         </div>
                         {/* Last Name */}
-                        <div className='w-full'>
-                            <div className='label'>
-                                <label className='label-text'>Last Name:</label>
+                        <div className="w-full">
+                            <div className="label">
+                                <label className="label-text">Last Name:</label>
                             </div>
                             <Controller
-                                name='lastname'
+                                name="lastname"
                                 control={control}
-                                defaultValue=''
+                                defaultValue=""
                                 rules={{ required: 'Last Name is required' }}
                                 render={({ field }) => (
                                     <input
-                                        id='lastname'
-                                        placeholder='Enter Your Last Name'
-                                        className={`input input-bordered input-success w-full ${errors.lastname ? 'input-error' : ''
-                                            }`}
-                                        type='text'
+                                        id="lastname"
+                                        placeholder="Enter Your Last Name"
+                                        className={`input input-bordered input-success w-full ${
+                                            errors.lastname ? 'input-error' : ''
+                                        }`}
+                                        type="text"
                                         {...field}
                                     />
                                 )}
                             />
                             {errors.lastname && (
-                                <p className='text-error'>{errors.lastname.message}</p>
+                                <p className="text-error">{errors.lastname.message}</p>
                             )}
                         </div>
 
                         {/* Email */}
-                        <div className='w-full'>
-                            <div className='label'>
-                                <label className='label-text'>Email:</label>
+                        <div className="w-full">
+                            <div className="label">
+                                <label className="label-text">Email:</label>
                             </div>
                             <Controller
-                                name='email'
+                                name="email"
                                 control={control}
-                                defaultValue=''
+                                defaultValue=""
                                 rules={{
                                     required: 'Email is required',
                                     pattern: {
@@ -208,99 +220,144 @@ console.log(companyOptions)
                                 }}
                                 render={({ field }) => (
                                     <input
-                                        placeholder='Enter Your Email'
-                                        className={`input input-bordered input-success w-full ${errors.email ? 'input-error' : ''
-                                            }`}
-                                        type='text'
+                                        placeholder="Enter Your Email"
+                                        className={`input input-bordered input-success w-full ${
+                                            errors.email ? 'input-error' : ''
+                                        }`}
+                                        type="text"
                                         {...field}
                                     />
                                 )}
                             />
                             {errors.email && (
-                                <p className='text-error'>{errors.email.message}</p>
+                                <p className="text-error">{errors.email.message}</p>
                             )}
                         </div>
 
                         {/* Phone Number */}
-                        <div className='w-full'>
-                            <div className='label'>
-                                <label className='label-text'>Phone Number:</label>
+                        <div className="w-full">
+                            <div className="label">
+                                <label className="label-text">Phone Number:</label>
                             </div>
-                            <Controller
-                                name='phoneNumbers'
-                                control={control}
-                                defaultValue='' // You can set the default value as needed
-                                rules={{
-                                    required: 'Phone Number is required',
-                                    pattern: {
-                                        value: /^[0-9]+$/,
-                                        message: 'Invalid number format. Please enter digits only.',
-                                    },
-                                }}
-                                render={({ field }) => (
-                                    <input
-                                        placeholder='Enter Your Phone Number'
-                                        className={`input input-bordered input-success w-full ${errors.phoneNumbers ? 'input-error' : ''
+                            <div className="flex items-center justify-center gap-1">
+                                <Controller
+                                    name="phoneNumbers.primary" // Update the field name
+                                    control={control}
+                                    defaultValue=""
+                                    rules={{
+                                        required: 'Phone Number is required',
+                                        pattern: {
+                                            value: /^[0-9]+$/,
+                                            message: 'Invalid number format. Please enter digits only.',
+                                        },
+                                    }}
+                                    render={({ field }) => (
+                                        <input
+                                            placeholder="Enter Your Phone Number"
+                                            className={`input input-bordered input-success w-full ${
+                                                errors['phoneNumbers.primary'] ? 'input-error' : ''
                                             }`}
-                                        type='text'
-                                        {...field}
-                                    />
+                                            type="text"
+                                            {...field}
+                                        />
+                                    )}
+                                />
+                                {errors['phoneNumbers.primary'] && (
+                                    <p className="text-error">{errors['phoneNumbers.primary'].message}</p>
                                 )}
-                            />
-                            {errors.phoneNumbers && (
-                                <p className='text-error'>{errors.phoneNumbers.message}</p>
-                            )}
+                                <div className="flex justify-center">
+                                    {showAdditionalNumber ? (
+                                        <button type="button" className="btn" onClick={toggleAdditionalNumber}>
+                                            <FaMinus />
+                                        </button>
+                                    ) : (
+                                        <button type="button" className="btn" onClick={toggleAdditionalNumber}>
+                                            <FaPlus />
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
                         </div>
 
+                        {/* Additional Number */}
+                        {showAdditionalNumber && (
+                            <div className="w-full">
+                                <div className="label">
+                                    <label htmlFor="additionalNumber" className="label-text">
+                                        Additional Number:
+                                    </label>
+                                </div>
+                                <Controller
+                                    name="phoneNumbers.additional" // Update the field name
+                                    control={control}
+                                    defaultValue=""
+                                    rules={{ required: 'Additional Number is required' }}
+                                    render={({ field }) => (
+                                        <input
+                                            id="additionalNumber"
+                                            placeholder="Enter Additional Number"
+                                            className={`input input-bordered input-success w-full ${
+                                                errors['phoneNumbers.additional'] ? 'input-error' : ''
+                                            }`}
+                                            type="text"
+                                            {...field}
+                                        />
+                                    )}
+                                />
+                                {errors['phoneNumbers.additional'] && (
+                                    <p className="text-error">{errors['phoneNumbers.additional'].message}</p>
+                                )}
+                            </div>
+                        )}
+
                         {/* WhatsApp Number */}
-                        <div className='w-full'>
-                            <div className='label'>
-                                <label className='label-text'>WhatsApp Number:</label>
+                        <div className="w-full">
+                            <div className="label">
+                                <label className="label-text">WhatsApp Number:</label>
                             </div>
                             <Controller
-                                name='whatsappNumber'
+                                name="whatsappNumber"
                                 control={control}
-                                defaultValue=''
+                                defaultValue=""
                                 rules={{
                                     required: 'WhatsApp Number is required',
                                     pattern: {
-                                        message:
-                                            'Invalid WhatsApp Number format. It should start with a plus sign and contain only digits.',
+                                        message: 'Invalid WhatsApp Number format. It should start with a plus sign and contain only digits.',
                                     },
                                 }}
                                 render={({ field }) => (
                                     <input
-                                        placeholder='Enter Your WhatsApp Number'
-                                        className={`input input-bordered input-success w-full ${errors.whatsappNumber ? 'input-error' : ''
-                                            }`}
-                                        type='text'
+                                        placeholder="Enter Your WhatsApp Number"
+                                        className={`input input-bordered input-success w-full ${
+                                            errors.whatsappNumber ? 'input-error' : ''
+                                        }`}
+                                        type="text"
                                         {...field}
                                     />
                                 )}
                             />
                             {errors.whatsappNumber && (
-                                <p className='text-error'>{errors.whatsappNumber.message}</p>
+                                <p className="text-error">{errors.whatsappNumber.message}</p>
                             )}
                         </div>
 
                         {/* Company Name */}
-                        <div className='form-control w-full'>
-                            <label htmlFor='companyName' className='label'>
-                                <span className='label-text'>Company Name:</span>
+                        <div className="form-control w-full">
+                            <label htmlFor="companyName" className="label">
+                                <span className="label-text">Company Name:</span>
                             </label>
                             <Controller
-                                name='companyName'
+                                name="companyName"
                                 control={control}
-                                defaultValue=''
+                                defaultValue=""
                                 rules={{ required: 'Company Name is required' }}
                                 render={({ field }) => (
                                     <select
-                                        id='companyName'
-                                        className={`select select-bordered ${errors.companyName ? 'input-error' : ''
-                                            }`}
+                                        id="companyName"
+                                        className={`select select-bordered ${errors.companyName ? 'input-error' : ''}`}
                                         {...field}
                                     >
-                                        <option disabled value=''>
+                                        <option disabled value="">
                                             Select Company Name
                                         </option>
                                         {companyOptions.map((option) => (
@@ -312,32 +369,31 @@ console.log(companyOptions)
                                 )}
                             />
                             {errors.companyName && (
-                                <p className='text-error'>{errors.companyName.message}</p>
+                                <p className="text-error">{errors.companyName.message}</p>
                             )}
                         </div>
 
                         {/* Company Type */}
-                        <div className='form-control w-full'>
-                            <label htmlFor='companyType' className='label'>
-                                <span className='label-text'>Company Type:</span>
+                        <div className="form-control w-full">
+                            <label htmlFor="companyType" className="label">
+                                <span className="label-text">Company Type:</span>
                             </label>
                             <Controller
-                                name='companyType'
+                                name="companyType"
                                 control={control}
-                                defaultValue=''
+                                defaultValue=""
                                 rules={{ required: 'Company Type is required' }}
                                 render={({ field }) => (
                                     <select
-                                        id='companyType'
-                                        className={`select select-bordered ${errors.companyType ? 'input-error' : ''
-                                            }`}
+                                        id="companyType"
+                                        className={`select select-bordered ${errors.companyType ? 'input-error' : ''}`}
                                         {...field}
                                     >
-                                        <option disabled value=''>
+                                        <option disabled value="">
                                             Select Company Type
                                         </option>
                                         {companyTypeOptions.map((option) => (
-                                            <option key={option.value} value={option.lable}>
+                                            <option key={option.value} value={option.label}>
                                                 {option.label}
                                             </option>
                                         ))}
@@ -345,26 +401,23 @@ console.log(companyOptions)
                                 )}
                             />
                             {errors.companyType && (
-                                <p className='text-error'>{errors.companyType.message}</p>
+                                <p className="text-error">{errors.companyType.message}</p>
                             )}
                         </div>
 
                         {/* Department */}
-                        <div className='form-control w-full'>
-                            <label className='label'>
-                                <span className='label-text'>Department:</span>
+                        <div className="form-control w-full">
+                            <label className="label">
+                                <span className="label-text">Department:</span>
                             </label>
                             <Controller
-                                name='department'
+                                name="department"
                                 control={control}
-                                defaultValue=''
+                                defaultValue=""
                                 rules={{ required: 'Department is required' }}
                                 render={({ field }) => (
-                                    <select
-                                        className={`select select-bordered ${errors.department ? 'input-error' : ''}`}
-                                        {...field}
-                                    >
-                                        <option disabled value=''>
+                                    <select className={`select select-bordered ${errors.department ? 'input-error' : ''}`} {...field}>
+                                        <option disabled value="">
                                             Select Department
                                         </option>
                                         {departmentOptions.map((option) => (
@@ -376,31 +429,27 @@ console.log(companyOptions)
                                 )}
                             />
                             {errors.department && (
-                                <p className='text-error'>{errors.department.message}</p>
+                                <p className="text-error">{errors.department.message}</p>
                             )}
                         </div>
 
                         {/* Position */}
-                        <div className='form-control w-full'>
-                            <label className='label'>
-                                <span className='label-text'>Position:</span>
+                        <div className="form-control w-full">
+                            <label className="label">
+                                <span className="label-text">Position:</span>
                             </label>
                             <Controller
-                                name='position'
+                                name="position"
                                 control={control}
-                                defaultValue=''
+                                defaultValue=""
                                 rules={{ required: 'Position is required' }}
                                 render={({ field }) => (
-                                    <select
-                                        className={`select select-bordered ${errors.position ? 'input-error' : ''
-                                            }`}
-                                        {...field}
-                                    >
-                                        <option disabled value=''>
+                                    <select className={`select select-bordered ${errors.position ? 'input-error' : ''}`} {...field}>
+                                        <option disabled value="">
                                             Select Position
                                         </option>
                                         {positionOptions.map((option) => (
-                                            <option key={option.value} value={option.lable}>
+                                            <option key={option.value} value={option.label}>
                                                 {option.label}
                                             </option>
                                         ))}
@@ -408,21 +457,20 @@ console.log(companyOptions)
                                 )}
                             />
                             {errors.position && (
-                                <p className='text-error'>{errors.position.message}</p>
+                                <p className="text-error">{errors.position.message}</p>
                             )}
                         </div>
-                        
                     </div>
                 </div>
 
                 {/* Add */}
-                <div className='flex justify-center mt-10'>
+                <div className="flex justify-center mt-10">
                     <button
                         style={{ backgroundColor: currentColor }}
-                        type='submit'
-                        className='btn'
+                        type="submit"
+                        className="btn"
                     >
-                        <GrAdd className='w-4 h-4' />
+                        <GrAdd className="w-4 h-4" />
                         Add Lead
                     </button>
                 </div>

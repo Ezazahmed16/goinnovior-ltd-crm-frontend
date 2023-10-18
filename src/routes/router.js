@@ -23,6 +23,7 @@ import ResumeAdd from "../pages/HumanResource/RecruitmentManegment/ResumeAdd/Res
 import InterviewEvaluation from "../pages/HumanResource/RecruitmentManegment/InterviewEvaluation/InterviewEvaluation";
 import EmployConfirmation from "../pages/HumanResource/RecruitmentManegment/EmployConfirmation/EmployConfirmation";
 import LeadDetails from "../pages/Marketing/Leads/LeadDetails";
+import DetailsInvoice from "../pages/Invoices/DetailsInvoice";
 
 
 const router = createBrowserRouter([
@@ -104,9 +105,24 @@ const router = createBrowserRouter([
 
             {
                 path: '/invoice',
-                element: <Invoices></Invoices>
+                element: (
+                    <RoleBasedRoute
+                        path="/invoice"
+                        element={<Invoices />}
+                        requiredRoles={['admin']}
+                    />
+                ),
             },
-
+            {
+                path: '/invoice-details/:id',
+                element: (
+                    <RoleBasedRoute
+                        path="/invoice-details/:id"
+                        element={<DetailsInvoice />}
+                        requiredRoles={['admin']}
+                    />
+                ),
+            },
 
             {
                 path: '/marketing-leads',

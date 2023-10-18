@@ -22,6 +22,7 @@ const modalStyles = {
 const Invoices = () => {
     const { currentColor } = useStateContext();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [statusFilter, setStatusFilter] = useState(''); // Initialize with an empty string
 
     const openModal = () => {
         setIsModalOpen(true);
