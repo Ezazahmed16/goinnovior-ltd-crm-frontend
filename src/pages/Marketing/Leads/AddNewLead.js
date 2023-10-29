@@ -11,9 +11,9 @@ import { useAuthUser } from 'react-auth-kit';
 const AddNewLead = () => {
     const { currentColor } = useStateContext();
     const auth = useAuthUser();
+    // console.log(auth().name)
     const [showAdditionalNumber, setShowAdditionalNumber] = useState(false);
 
-console.log(auth().name)
 
     const {
         handleSubmit,
@@ -106,8 +106,8 @@ console.log(auth().name)
             // Merge user's authentication data into the form data
             const formDataWithAuth = {
                 ...data,
-                fullName, // Changed "fullname" to "fullName"
-                authData: auth().name,
+                fullName, 
+                leadAddBy: auth().name,
             };
 
             await addLeadMutation.mutateAsync(formDataWithAuth);

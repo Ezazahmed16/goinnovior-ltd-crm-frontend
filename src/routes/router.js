@@ -24,6 +24,7 @@ import InterviewEvaluation from "../pages/HumanResource/RecruitmentManegment/Int
 import EmployConfirmation from "../pages/HumanResource/RecruitmentManegment/EmployConfirmation/EmployConfirmation";
 import LeadDetails from "../pages/Marketing/Leads/LeadDetails";
 import DetailsInvoice from "../pages/Invoices/DetailsInvoice";
+import Contact from "../pages/Marketing/Contact/Contact";
 
 
 const router = createBrowserRouter([
@@ -123,7 +124,8 @@ const router = createBrowserRouter([
                     />
                 ),
             },
-
+            // ======= Marketing =======
+            // ======= Marketing - Leads =======
             {
                 path: '/marketing-leads',
                 element: (
@@ -150,32 +152,80 @@ const router = createBrowserRouter([
                 element: <AddNewLead></AddNewLead>
             },
 
+            // ======= Marketing - Contact =======
+            {
+                path: '/marketing-contact',
+                element: (
+                    <RoleBasedRoute
+                        path="/marketing-contact"
+                        element={<Contact />}
+                        requiredRoles={['admin', 'marketing']}
+                    />
+                ),
+            },
+
+            // ==== Admin ==== 
 
             {
                 path: '/admin/genarel-settings/createUser',
-                element: <CreateUser />
+                element: (
+                    <RoleBasedRoute
+                        path="/admin/genarel-settings/createUser"
+                        element={<CreateUser />}
+                        requiredRoles={['admin']}
+                    />
+                ),
             },
             {
                 path: '/admin/genarel-settings/allUsers',
-                element: <AllUser />
+                element: (
+                    <RoleBasedRoute
+                        path="/admin/genarel-settings/allUsers"
+                        element={<AllUser />}
+                        requiredRoles={['admin']}
+                    />
+                ),
             },
             {
                 path: '/admin/marketing-addCompany',
-                element: <AddCompany />
+                element: (
+                    <RoleBasedRoute
+                        path="/admin/marketing-addCompany"
+                        element={<AddCompany />}
+                        requiredRoles={['admin']}
+                    />
+                ),
             },
             {
                 path: '/admin/marketing-addPosition',
-                element: <AddPosition />
+                element: (
+                    <RoleBasedRoute
+                        path="/admin/marketing-addPosition"
+                        element={<AddPosition />}
+                        requiredRoles={['admin']}
+                    />
+                ),
             },
             {
                 path: '/admin/marketing-companyType',
-                element: <AddCompanyType />
+                element: (
+                    <RoleBasedRoute
+                        path="/admin/marketing-companyType"
+                        element={<AddCompanyType />}
+                        requiredRoles={['admin']}
+                    />
+                ),
             },
             {
                 path: '/admin/marketing-addDepartment',
-                element: <AddDepartment />
+                element: (
+                    <RoleBasedRoute
+                        path="/admin/marketing-addDepartment"
+                        element={<AddDepartment />}
+                        requiredRoles={['admin']}
+                    />
+                ),
             },
-
         ]
     },
     {

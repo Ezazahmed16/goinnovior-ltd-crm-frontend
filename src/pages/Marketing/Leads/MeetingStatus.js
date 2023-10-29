@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { useAuthUser } from 'react-auth-kit';
 
 const MeetingStatus = ({id}) => {
     const [message, setMessage] = useState('');
     const [responseMessage, setResponseMessage] = useState('');
+
+    const auth = useAuthUser();
+    const callBy = (auth().name)
 
     const handleMessageChange = (e) => {
         setMessage(e.target.value);
@@ -14,12 +18,13 @@ const MeetingStatus = ({id}) => {
         e.preventDefault();
         console.log(message)
         // Get the current date
-        const currentDate = new Date().toJSON();
+        const callingDate = new Date().toJSON();
 
         try {
             const response = await axios.put(`http://localhost:5000/api/leads/${id}`, {
                 message,
-                currentDate,
+                callingDate,
+                callBy,
                 status: 'later'
             });
             toast.success('Status Updated')

@@ -7,6 +7,7 @@ import AddNewLead from './AddNewLead';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import MeetingStatus from './MeetingStatus';
 import { useQuery, useQueryClient } from 'react-query';
+import ContactStatus from './ContactStatus';
 
 const modalStyles = {
     content: {
@@ -30,25 +31,30 @@ const LeadDetails = () => {
     const { id } = useParams();
     const queryClient = useQueryClient();
     const { data: leadData, isLoading, isError } = useQuery(['lead', id], () => fetchLeadData(id), {
-        enabled: !!id, // Ensure the query is enabled when there's an 'id'
-        refetchOnWindowFocus: true, // Auto refetch when the window gains focus
-        refetchInterval: 60000, // Set your desired auto refetch interval (e.g., every 60 seconds)
+        enabled: !!id,
+        refetchOnWindowFocus: true,
+        refetchInterval: 60000,
     });
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [activeModal, setActiveModal] = useState(null);
 
-    const openModal = () => {
+    const openModal = (modalName) => {
+        setActiveModal(modalName);
         setIsModalOpen(true);
     };
 
     const closeModal = () => {
         setIsModalOpen(false);
+        setActiveModal(null);
     };
 
     const refetchLeadData = () => {
         // Manually trigger a refetch
         queryClient.invalidateQueries(['lead', id]);
     };
+
+
 
     if (isLoading) {
         return (
@@ -113,19 +119,23 @@ const LeadDetails = () => {
                                     </td>
                                     <td>{leadData.whatsappNumber}</td>
                                     <td className='flex flex-col gap-1'>
-                                        <button className='btn btn-xs btn-error' onClick={openModal}>
+                                        <button className='btn btn-xs btn-error' onClick={() => openModal('MeetingStatus')}>
                                             Meeting Status
                                         </button>
-                                        <div className="btn btn-xs btn-success">Contact</div>
+                                        <button className='btn btn-xs btn-error' onClick={() => openModal('ContactStatus')}>
+                                            Contact
+                                        </button>
                                         <div className="btn btn-xs btn-warning">Edit</div>
                                     </td>
+
                                 </tr>
                             </tbody>
                         </table>
                     </div>
 
-                    <div className="my-5">
-                        <h1>Call By: {leadData.authData}</h1>
+                    <div className="my-5 border border-black p-5">
+                        <h1>Lead Add: {leadData.leadAddBy}</h1>
+                        <h1>Cold Call: {leadData.callBy}</h1>
                         <h1>Message: {leadData.message}</h1>
                     </div>
                 </div>
@@ -134,13 +144,18 @@ const LeadDetails = () => {
             <Modal
                 isOpen={isModalOpen}
                 onRequestClose={closeModal}
-                contentLabel="Add New Lead Modal"
+                contentLabel="Dynamic Modal Content"
                 style={modalStyles}
             >
                 <button className='mt-10 btn' onClick={closeModal}>
                     <AiFillCloseCircle className='w-8 h-8' />
                 </button>
-                <MeetingStatus id={id} refetchLeadData={refetchLeadData} />
+                {activeModal === 'MeetingStatus' ? (
+                    <MeetingStatus id={id} refetchLeadData={refetchLeadData} />
+                ) : null}
+                {activeModal === 'ContactStatus' ? (
+                    <ContactStatus id={id} refetchLeadData={refetchLeadData} />
+                ) : null}
             </Modal>
         </div>
     );

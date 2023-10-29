@@ -124,9 +124,10 @@ const LeadsList = ({ leadsData, itemsPerPage, currentPage }) => {
                     {/* foot */}
                     <tfoot>
                         <tr>
-                            <th>Name</th>
-                            <th>Org. Name</th>
-                            <th>Org. Contact Info</th>
+                        <th>Name</th>
+                            <th>Organization</th>
+                            <th>Number</th>
+                            <th>Whatsapp</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>

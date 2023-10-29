@@ -1,17 +1,19 @@
 import React from 'react';
+import './Sidebar.css'
 import { Link, NavLink } from 'react-router-dom';
-import logo from '../../assets/logo.png';
+import logo from '../../assets/white-log.png';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import { MdManageAccounts, MdOutlineCancel, MdOutlineMedicalInformation } from 'react-icons/md';
 import { useStateContext } from '../../contexts/ContextProvider';
 import { BiSolidDashboard, BiUserCircle } from 'react-icons/bi';
-import { AiOutlineCalendar, AiOutlineUser } from 'react-icons/ai';
+import { AiOutlineCalendar } from 'react-icons/ai';
 import { BsHandbagFill, BsKanban } from 'react-icons/bs';
 import { FaFileInvoiceDollar } from 'react-icons/fa';
 import { TbBrandSuperhuman } from 'react-icons/tb';
 import { GrUserSettings } from 'react-icons/gr';
 import { SiGoogleads, SiGooglemarketingplatform, SiMarketo } from 'react-icons/si';
 import { FiSettings } from 'react-icons/fi';
+import { IoMdContacts } from 'react-icons/io';
 
 const Sidebar = () => {
     const { activeMenu, setActiveMenu, screenSize, currentColor } = useStateContext();
@@ -26,13 +28,13 @@ const Sidebar = () => {
 
     return (
         <div>
-            <div className="ml-3 h-screen md:overflow-hidden overflow-auto md:hover:overflow-auto pb-10">
+            <div className="pl-3 h-screen md:overflow-hidden overflow-auto md:hover:overflow-auto pb-10 bg-gray-800 text-white">
                 {activeMenu && (
                     <>
-                        <div className="flex justify-between items-center">
+                        <div className="flex justify-center pt-5 items-center">
                             {/* Logo */}
-                            <Link to="/" onClick={handleCloseSideBar} className="items-center mt-4 flex w-40 ">
-                                <img className='' src={logo} alt="logo" />
+                            <Link to="/" onClick={handleCloseSideBar} className="items-center flex w-40 ">
+                                <img className='block mx-auto' src={logo} alt="logo" />
                             </Link>
 
                             {/* Tooltip for the cancel icon */}
@@ -46,12 +48,12 @@ const Sidebar = () => {
                             </TooltipComponent>
                         </div>
 
-                        <div className="mt-5">
-                            <ul className="menu mr-5 rounded-box mb-10">
+                        <div className="mt-2">
+                            <ul className="menu mr-5 rounded-box mb-10 hover-menuc">
                                 <p className="text-gray-400 m-3 mt-4 uppercase">dashboard</p>
-                                <li>
+                                <li className=''>
                                     <NavLink
-                                        className='py-2'
+                                        className='py-2 hover:text-white'
                                         onClick={handleCloseSideBar}
                                         style={({ isActive }) => ({
                                             backgroundColor: isActive ? currentColor : ''
@@ -62,10 +64,10 @@ const Sidebar = () => {
                                 </li>
 
                                 {/* ................Apps..........  */}
-                                <p className="text-gray-400 m-3 mt-4 uppercase">apps</p>
+                                <p className="text-gray-400 m-3 mt-4 uppercase ">apps</p>
                                 <li className='mb-1'>
                                     <NavLink
-                                        className='py-2'
+                                        className='py-2 hover:text-white'
                                         onClick={handleCloseSideBar}
                                         style={({ isActive }) => ({
                                             backgroundColor: isActive ? currentColor : ''
@@ -76,7 +78,7 @@ const Sidebar = () => {
                                 </li>
                                 <li className='mb-1'>
                                     <NavLink
-                                        className='py-2'
+                                        className='py-2 hover:text-white'
                                         onClick={handleCloseSideBar}
                                         style={({ isActive }) => ({
                                             backgroundColor: isActive ? currentColor : ''
@@ -90,13 +92,13 @@ const Sidebar = () => {
                                 <p className="text-gray-400 m-3 mt-4 uppercase">pages</p>
                                 <li className='mb-1'>
                                     <details close>
-                                        <summary >
+                                        <summary className='hover:text-white'>
                                             <SiGooglemarketingplatform className='w-6 h-6' />
                                             Marketing</summary>
                                         <ul>
                                             <li>
                                                 <NavLink
-                                                    className='py-2'
+                                                    className='py-2 hover:text-white'
                                                     onClick={handleCloseSideBar}
                                                     style={({ isActive }) => ({
                                                         backgroundColor: isActive ? currentColor : ''
@@ -106,18 +108,30 @@ const Sidebar = () => {
                                                     Leads
                                                 </NavLink>
                                             </li>
+                                            <li>
+                                                <NavLink
+                                                    className='py-2 hover:text-white'
+                                                    onClick={handleCloseSideBar}
+                                                    style={({ isActive }) => ({
+                                                        backgroundColor: isActive ? currentColor : ''
+                                                    })} to='/marketing-contact'
+                                                >
+                                                    <IoMdContacts className='w-6 h-6' />
+                                                    Contact
+                                                </NavLink>
+                                            </li>
                                         </ul>
                                     </details>
                                 </li>
                                 <li className='mb-1'>
                                     <details close>
-                                        <summary >
+                                        <summary className='hover:text-white'>
                                             <BiUserCircle className='w-6 h-6' />
                                             Clients</summary>
                                         <ul>
                                             <li>
                                                 <NavLink
-                                                    className='py-2'
+                                                    className='py-2 hover:text-white'
                                                     onClick={handleCloseSideBar}
                                                     style={({ isActive }) => ({
                                                         backgroundColor: isActive ? currentColor : ''
@@ -134,33 +148,33 @@ const Sidebar = () => {
                                 {/* HR ========================= */}
                                 <li className='mb-1'>
                                     <details close>
-                                        <summary >
+                                        <summary className='hover:text-white'>
                                             <TbBrandSuperhuman className='w-6 h-6' />
                                             HR</summary>
                                         <ul className=''>
                                             <li className='mb-1'>
                                                 <details close>
-                                                    <summary >
+                                                    <summary className='hover:text-white'>
                                                         <BsHandbagFill className='w-6 h-6' />
                                                         Recruitment Manegment</summary>
                                                     <ul>
                                                         <li>
-                                                            <Link>
+                                                            <Link className='hover:text-white'>
                                                                 Job Posting
                                                             </Link>
                                                         </li>
                                                         <li>
-                                                            <Link to='/human-resource/recruitment/add-resume'>
+                                                            <Link className='hover:text-white' to='/human-resource/recruitment/add-resume'>
                                                                 Resume Add
                                                             </Link>
                                                         </li>
-                                                        <li>
-                                                            <Link to='/human-resource/recruitment/interview-evaluation'>
+                                                        <li className='hover:text-white'>
+                                                            <Link to='/human-resource/recruitment/interview-evaluation' className='hover:text-white'>
                                                                 Interview Evaluation
                                                             </Link>
                                                         </li>
-                                                        <li>
-                                                            <Link to='/human-resource/recruitment/employ-confirmation'>
+                                                        <li className='hover:text-white'>
+                                                            <Link to='/human-resource/recruitment/employ-confirmation'className='hover:text-white'>
                                                                 Employ Confirmation
                                                             </Link>
                                                         </li>
@@ -197,7 +211,7 @@ const Sidebar = () => {
                                 {/* Invoice ============== */}
                                 <li className='mb-1'>
                                     <NavLink
-                                        className='py-2'
+                                        className='py-2 hover:text-white'
                                         onClick={handleCloseSideBar}
                                         style={({ isActive }) => ({
                                             backgroundColor: isActive ? currentColor : ''
@@ -210,7 +224,7 @@ const Sidebar = () => {
                                 {/* Accounts ======================  */}
                                 <li className='mb-1'>
                                     <details close>
-                                        <summary >
+                                        <summary className='hover:text-white'>
                                             <MdManageAccounts className='w-6 h-6' />
                                             Accounts</summary>
                                         <ul>
@@ -234,21 +248,21 @@ const Sidebar = () => {
                                 <p className="text-gray-400 m-3 mt-4 uppercase">Master Settings</p>
                                 <li className='mb-1'>
                                     <details close>
-                                        <summary >
+                                        <summary className='hover:text-white'>
                                             <GrUserSettings className='w-6 h-6' />
                                             Settings</summary>
                                         <ul className=''>
                                             <li className='mb-1'>
                                                 <details close>
-                                                    <summary >
+                                                    <summary className='hover:text-white'>
                                                         <FiSettings className='w-6 h-6' />
                                                         Genarel Settings</summary>
                                                     <ul>
-                                                        <li>
-                                                            <Link to='/admin/genarel-settings/createUser'>Create User</Link>
+                                                        <li className='hover:text-white'>
+                                                            <Link className='hover:text-white' to='/admin/genarel-settings/createUser'>Create User</Link>
                                                         </li>
-                                                        <li>
-                                                            <Link to='/admin/genarel-settings/allUsers'>All User</Link>
+                                                        <li className='hover:text-white'>
+                                                            <Link className='hover:text-white' to='/admin/genarel-settings/allUsers'>All User</Link>
                                                         </li>
                                                     </ul>
                                                 </details>
@@ -256,21 +270,21 @@ const Sidebar = () => {
 
                                             <li>
                                                 <details close>
-                                                    <summary >
+                                                    <summary className='hover:text-white'>
                                                         <SiMarketo className='w-6 h-6' />
                                                         Marketing</summary>
                                                     <ul>
                                                         <li>
-                                                            <Link to='/admin/marketing-addCompany'>Add Company</Link>
+                                                            <Link className='hover:text-white' to='/admin/marketing-addCompany'>Add Company</Link>
                                                         </li>
                                                         <li>
-                                                            <Link to='/admin/marketing-companyType'>Add Company type</Link>
+                                                            <Link className='hover:text-white' to='/admin/marketing-companyType'>Add Company type</Link>
                                                         </li>
                                                         <li>
-                                                            <Link to='/admin/marketing-addPosition'>Add Position</Link>
+                                                            <Link className='hover:text-white' to='/admin/marketing-addPosition'>Add Position</Link>
                                                         </li>
                                                         <li>
-                                                            <Link to='/admin/marketing-addDepartment'>Add Department</Link>
+                                                            <Link className='hover:text-white' to='/admin/marketing-addDepartment'>Add Department</Link>
                                                         </li>
                                                     </ul>
                                                 </details>
